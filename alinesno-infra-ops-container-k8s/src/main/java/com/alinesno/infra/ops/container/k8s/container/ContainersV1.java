@@ -82,7 +82,7 @@ public class ContainersV1 extends KubernetesApiParent implements KubectlOpGet<V1
      * @throws Exception 当附加操作失败时抛出异常
      */
     @Override
-    public Process attach(AttachOpsParams params, String[] command, ApiClient apiClient) throws Exception {
+    public Process attach(AttachOpsParams params, String[] command, ApiClient apiClient) {
         try {
             Exec exec = new Exec(apiClient);
             return exec.exec(params.getNamespaceName(), params.getPodName(), command, params.getContainer(), true, true);
