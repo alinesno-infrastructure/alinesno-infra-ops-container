@@ -22,6 +22,7 @@
 
 	<modules>
 		<!-- 应用服务 -->
+        <module>alinesno-infra-ops-container-k8s</module>  <!-- K8S服务 -->
         <module>alinesno-infra-ops-container-facade</module>  <!-- 接口和引用 -->
         <module>alinesno-infra-ops-container-domain</module>  <!-- 领域服务 -->
         <module>alinesno-infra-ops-container-adapter</module> <!-- 适配层 -->
