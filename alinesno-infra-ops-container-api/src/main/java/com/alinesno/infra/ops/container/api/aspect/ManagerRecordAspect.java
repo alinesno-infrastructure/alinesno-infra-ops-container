@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  * 
  * 用户登录及页面操作监控的AOP切面。多个切面时，使用@Order(i)注解来标识切面的优先级。i的值越小，优先级越高，用于记录方法运行的时间。
  * 
- * @Author WeiXiaoJin
+ * @author WeiXiaoJin
  * @Since 2019年4月8日 下午8:30:43
  */
 @Order(5)

@@ -1,1 +1,1 @@
-package com.alinesno.infra.base.authority.client;
+package com.alinesno.infra.ops.container.client;
