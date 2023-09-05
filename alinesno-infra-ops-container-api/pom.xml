@@ -10,7 +10,6 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<groupId>com.alinesno.infra.ops</groupId>
 	<artifactId>alinesno-infra-ops-container-api</artifactId>
 	<packaging>jar</packaging>
 
@@ -24,9 +23,16 @@
 		</dependency>
 		<dependency>
 			<groupId>com.alinesno.infra.ops</groupId>
-			<artifactId>alinesno-infra-ops-container-k8s</artifactId>
+			<artifactId>alinesno-infra-ops-container-kubernetes</artifactId>
 			<version>${revision}</version>
         </dependency>
+
+		<!-- Maven 依赖 -->
+		<dependency>
+			<groupId>org.yaml</groupId>
+			<artifactId>snakeyaml</artifactId>
+			<version>2.0</version>
+		</dependency>
 
 		<!-- webSocket -->
 		<dependency>

@@ -1,6 +1,6 @@
 package com.alinesno.infra.ops.container.api.aspect;
 
-import com.alinesno.infra.ops.container.entity.ManagerRecordEntity;
+import com.alinesno.infra.ops.container.entity.kubernetes.ManagerRecordEntity;
 import org.apache.commons.lang.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

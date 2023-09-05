@@ -6,7 +6,7 @@ import com.alinesno.infra.common.facade.pageable.TableDataInfo;
 import com.alinesno.infra.common.facade.response.HttpStatus;
 import com.alinesno.infra.common.facade.services.IBaseService;
 import com.alinesno.infra.ops.container.k8s.KuberanetesPageBean;
-import com.alinesno.infra.ops.container.service.IEnvClusterService;
+import com.alinesno.infra.ops.container.service.kubernetes.IEnvClusterService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.kubernetes.client.openapi.ApiClient;

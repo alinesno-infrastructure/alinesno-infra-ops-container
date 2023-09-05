@@ -14,7 +14,7 @@ import java.util.concurrent.Executors;
 import com.alinesno.infra.common.core.context.SpringContext;
 import com.alinesno.infra.ops.container.k8s.container.ContainersV1;
 import com.alinesno.infra.ops.container.k8s.ops.AttachOpsParams;
-import com.alinesno.infra.ops.container.service.IEnvClusterService;
+import com.alinesno.infra.ops.container.service.kubernetes.IEnvClusterService;
 import com.google.common.base.Splitter;
 
 import io.kubernetes.client.openapi.ApiClient;

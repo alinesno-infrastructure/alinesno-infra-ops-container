@@ -1,7 +1,7 @@
 package com.alinesno.infra.ops.container.api.session;
 
-import com.alinesno.infra.ops.container.entity.EnvClusterEntity;
-import com.alinesno.infra.ops.container.service.IEnvClusterService;
+import com.alinesno.infra.ops.container.entity.kubernetes.EnvClusterEntity;
+import com.alinesno.infra.ops.container.service.kubernetes.IEnvClusterService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
