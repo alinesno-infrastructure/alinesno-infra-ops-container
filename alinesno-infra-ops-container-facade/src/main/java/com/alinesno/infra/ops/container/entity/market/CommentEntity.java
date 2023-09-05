@@ -8,6 +8,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
 
+/**
+ * 评论实体类
+ * 表名：comments
+ */
 @TableName("comments")
 public class CommentEntity extends InfraBaseEntity {
 
@@ -27,4 +31,7 @@ public class CommentEntity extends InfraBaseEntity {
     private Date commentTime;
 
     // Getters and setters
+
+    // 在这里编写属性的Getter和Setter方法
+
 }

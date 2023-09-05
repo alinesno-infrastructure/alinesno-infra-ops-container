@@ -11,17 +11,23 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * 容器产品服务实现类
+ */
 @Service
 public class ContainerProductServiceImpl extends IBaseServiceImpl<ContainerProductEntity, ContainerProductMapper> implements IContainerProductService {
 
-    private static final Logger log = LoggerFactory.getLogger(ContainerDeployServiceImpl.class) ;
+    private static final Logger log = LoggerFactory.getLogger(ContainerDeployServiceImpl.class);
 
+    /**
+     * 创建容器产品
+     *
+     * @param containerProductDTO 容器产品DTO
+     */
     @Override
     public void createProduct(ContainerProductDTO containerProductDTO) {
-
         ContainerProductEntity entity = new ContainerProductEntity();
-        BeanUtils.copyProperties(containerProductDTO , entity);
-
-        this.save(entity) ;
+        BeanUtils.copyProperties(containerProductDTO, entity);
+        this.save(entity);
     }
 }

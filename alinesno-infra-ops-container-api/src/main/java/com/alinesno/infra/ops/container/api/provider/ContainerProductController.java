@@ -14,7 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
- * 容器产品控制
+ * 容器产品控制器
+ * 处理容器产品的保存和添加请求
  */
 @RestController
 @RequestMapping("/products")
@@ -31,6 +32,7 @@ public class ContainerProductController {
 
     /**
      * 保存容器产品信息
+     *
      * @param containerProductDTO 容器产品DTO
      */
     @GetMapping
@@ -41,6 +43,7 @@ public class ContainerProductController {
 
     /**
      * 添加容器产品
+     *
      * @param file 包含容器产品信息的YAML文件
      */
     @PostMapping
@@ -49,7 +52,7 @@ public class ContainerProductController {
             ContainerConfigDto dto = YamlUtils.loadFromYaml(file.getResource().getFile(), ContainerConfigDto.class);
             log.debug("containerProduct DTO = {}", dto);
 
-            ContainerProductEntity entity = new ContainerProductEntity() ;
+            ContainerProductEntity entity = new ContainerProductEntity();
 
             entity.setName(dto.getInfo().getName());
             entity.setDescription(dto.getInfo().getDescription());

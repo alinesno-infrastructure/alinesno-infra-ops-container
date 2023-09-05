@@ -4,7 +4,11 @@ import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
 import java.time.LocalDateTime;
 
-@TableName("service")
+/**
+ * 容器产品实体类
+ * 表名：service
+ */
+@TableName("container_product")
 public class ContainerProductEntity extends InfraBaseEntity {
 
     @TableField("name")
@@ -29,7 +33,6 @@ public class ContainerProductEntity extends InfraBaseEntity {
     private int hasDeploy ;
 
     // Getters and setters
-
 
     public String getName() {
         return name;
