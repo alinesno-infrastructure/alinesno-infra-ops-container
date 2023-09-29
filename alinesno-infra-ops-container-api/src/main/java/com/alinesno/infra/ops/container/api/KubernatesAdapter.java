@@ -1,15 +1,14 @@
 package com.alinesno.infra.ops.container.api;
 
-import com.alinesno.infra.common.core.rest.BaseController;
 import com.alinesno.infra.common.facade.mapper.entity.BaseEntity;
 import com.alinesno.infra.common.facade.pageable.TableDataInfo;
 import com.alinesno.infra.common.facade.response.HttpStatus;
 import com.alinesno.infra.common.facade.services.IBaseService;
+import com.alinesno.infra.common.web.adapter.rest.BaseController;
 import com.alinesno.infra.ops.container.k8s.KuberanetesPageBean;
 import com.alinesno.infra.ops.container.service.kubernetes.IEnvClusterService;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import io.kubernetes.client.openapi.ApiClient;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Kubernetes适配器
