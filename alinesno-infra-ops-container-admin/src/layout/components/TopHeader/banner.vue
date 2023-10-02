@@ -10,48 +10,36 @@
       <div v-if="saasUrl" class="dashboard-home" @click="dashboardHome()">
         <i class="fa-solid fa-house"></i> 工作台
       </div>
+      <div class="dashboard-home" @click="choiceCurrentApplication()">
+        <i class="fa-solid fa-truck-fast"></i> 请选择当前集群
+      </div>
     </router-link>
   </div>
 </template>
 
-<script>
 
-export default {
-  name: 'TopHeader',
-  components: {
-  },
-  computed: {
-  },
-  data() {
+<script setup>
 
-    let saasTitle = 'AIP智能设施'
-    let enableLogo = true;
-    let saasUrl = 'http://alinesno-infra-plat-console-admin.beta.plat.infra.linesno.com' ;
-    let saasLogoUrl = 'http://portal.infra.linesno.com/logo.png' ; 
-    let displayUrl = ''; 
+const TopHeader = ref('') ;
+const saasTitle = 'AIP智能设施'
+const enableLogo = ref(true);
+const saasUrl = ref('http://alinesno-infra-plat-console-admin.beta.plat.infra.linesno.com') ;
+const saasLogoUrl = 'http://portal.infra.linesno.com/logo.png' ; 
+const displayUrl = ''; 
 
-
-    return {
-      saasTitle,
-      saasUrl,
-      saasLogoUrl,
-      enableLogo,
-      displayUrl,
-      domainName: null,
-    }
-  },
-  created() {
-  },
-  methods: {
-    dashboardHome() {
-      window.location.href = this.saasUrl
-    },
-    // 进入企业官网
-    enterDomain() {
-      if (this.domainName) { // 跳转进入官网
-        window.open(this.domainName)
-      }
-    }
+// 进入企业官网
+function enterDomain() {
+  if (this.domainName) { // 跳转进入官网
+    window.open(this.domainName)
   }
 }
+
+function dashboardHome() {
+  window.location.href = saasUrl.value
+}
+
+function choiceCurrentApplication(){
+ console.log('选择应用.') 
+}
+
 </script>
