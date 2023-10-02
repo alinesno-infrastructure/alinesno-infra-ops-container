@@ -202,55 +202,13 @@ let echart = echarts;
 
 
 const icons = ref([
-        {
-          icon: "assets/icons/dashboard/kubernetes.svg",
-          name: "Kubernetes",
-          total: "3",
-          usage: "3",
-          status: "1",
-        },
-        {
-          icon: "assets/icons/dashboard/istio.svg",
-          name: "Istio",
-          total: "1",
-          usage: "1",
-          status: "0",
-        },
-        {
-          icon: "assets/icons/dashboard/monitoring.svg",
-          name: "Monitoring",
-          total: "10",
-          usage: "10",
-          status: "1",
-        },
-        {
-          icon: "assets/icons/dashboard/logging.svg",
-          name: "Logging",
-          total: "5",
-          usage: "5",
-          status: "0",
-        },
-        {
-          icon: "assets/icons/dashboard/dev-ops.svg",
-          name: "Dev Ops",
-          total: "4",
-          usage: "4",
-          status: "1",
-        },
-        {
-          icon: "assets/icons/dashboard/logging.svg",
-          name: "Logging",
-          total: "4",
-          usage: "4",
-          status: "0",
-        },
-        {
-          icon: "assets/icons/dashboard/monitoring.svg",
-          name: "Monitoring",
-          total: "7",
-          usage: "7",
-          status: "0",
-        }
+        {icon: "assets/icons/dashboard/kubernetes.svg",name: "Kubernetes",total: "3",usage: "3",status: "1",},
+        {icon: "assets/icons/dashboard/istio.svg",name: "Istio",total: "1",usage: "1",status: "0",},
+        {icon: "assets/icons/dashboard/monitoring.svg",name: "Monitoring",total: "10",usage: "10",status: "1",},
+        {icon: "assets/icons/dashboard/logging.svg",name: "Logging",total: "5",usage: "5",status: "0",},
+        {icon: "assets/icons/dashboard/dev-ops.svg",name: "Dev Ops",total: "4",usage: "4",status: "1",},
+        {icon: "assets/icons/dashboard/logging.svg",name: "Logging",total: "4",usage: "4",status: "0",},
+        {icon: "assets/icons/dashboard/monitoring.svg",name: "Monitoring",total: "7",usage: "7",status: "0",}
       ])  ;
 
 const resources = ref([
