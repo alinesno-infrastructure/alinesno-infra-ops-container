@@ -4,7 +4,7 @@
       <el-col :span="24">
         <div class="top-header">
           <div class="header-icon-banner">
-            <i class="fa-solid fa-truck-fast"></i>
+            <i class="fa-solid fa-ferry"></i>
           </div>
           <div class="icon">
             <div class="title">
