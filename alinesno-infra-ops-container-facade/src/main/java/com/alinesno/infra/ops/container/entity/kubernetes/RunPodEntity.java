@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.kubernetes;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import java.math.BigDecimal;
 
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
@@ -15,202 +18,110 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @version 1.0.0
  */
 @TableName("run_pod")
+@Data
 public class RunPodEntity extends InfraBaseEntity {
 
     /**
      * 容器组
      */
     @TableField("container_group_name")
+	@ColumnType(length=255)
+	@ColumnComment("容器组")
     private String containerGroupName;
 
     /**
      * 命名空间
      */
     @TableField("namespace_name")
+	@ColumnType(length=255)
+	@ColumnComment("命名空间")
     private String namespaceName;
 
     /**
      * 状态
      */
     @TableField("status")
+	@ColumnType(length=255)
+	@ColumnComment("状态")
     private String status;
 
     /**
      * 容器数
      */
     @TableField("container_count")
+	@ColumnType(length=255)
+	@ColumnComment("容器数")
     private Long containerCount;
 
     /**
      * 重启次数
      */
     @TableField("restart_count")
+	@ColumnType(length=255)
+	@ColumnComment("重启次数")
     private Long restartCount;
 
     /**
      * CPU使用量
      */
     @TableField("cpu_usage")
+	@ColumnType(length=255)
+	@ColumnComment("CPU使用量")
     private BigDecimal cpuUsage;
 
     /**
      * 内存使用量
      */
     @TableField("memory_usage")
+	@ColumnType(length=255)
+	@ColumnComment("内存使用量")
     private BigDecimal memoryUsage;
 
     /**
      * 运行时间（秒）
      */
     @TableField("age")
+	@ColumnType(length=255)
+	@ColumnComment("运行时间（秒）")
     private Long age;
 
     /**
      * Pod IP地址
      */
     @TableField("pod_ip_address")
+	@ColumnType(length=255)
+	@ColumnComment("Pod")
     private String podIpAddress;
 
     /**
      * Node IP地址
      */
     @TableField("node_ip_address")
+	@ColumnType(length=255)
+	@ColumnComment("Node")
     private String nodeIpAddress;
 
     /**
      * CPU限制
      */
     @TableField("cpu_limit")
+	@ColumnType(length=255)
+	@ColumnComment("CPU限制")
     private BigDecimal cpuLimit;
 
     /**
      * 内存限制
      */
     @TableField("memory_limit")
+	@ColumnType(length=255)
+	@ColumnComment("内存限制")
     private BigDecimal memoryLimit;
 
     /**
      * 探针状态
      */
     @TableField("probe_status")
+	@ColumnType(length=255)
+	@ColumnComment("探针状态")
     private String probeStatus;
-
-    // getter and setter
-
-    public String getContainerGroupName() {
-        return this.containerGroupName;
-    }
-
-    public RunPodEntity setContainerGroupName(String arg) {
-        this.containerGroupName = arg;
-        return this;
-    }
-
-    public String getNamespaceName() {
-        return this.namespaceName;
-    }
-
-    public RunPodEntity setNamespaceName(String arg) {
-        this.namespaceName = arg;
-        return this;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public RunPodEntity setStatus(String arg) {
-        this.status = arg;
-        return this;
-    }
-
-    public Long getContainerCount() {
-        return this.containerCount;
-    }
-
-    public RunPodEntity setContainerCount(Long arg) {
-        this.containerCount = arg;
-        return this;
-    }
-
-    public Long getRestartCount() {
-        return this.restartCount;
-    }
-
-    public RunPodEntity setRestartCount(Long arg) {
-        this.restartCount = arg;
-        return this;
-    }
-
-    public BigDecimal getCpuUsage() {
-        return this.cpuUsage;
-    }
-
-    public RunPodEntity setCpuUsage(BigDecimal arg) {
-        this.cpuUsage = arg;
-        return this;
-    }
-
-    public BigDecimal getMemoryUsage() {
-        return this.memoryUsage;
-    }
-
-    public RunPodEntity setMemoryUsage(BigDecimal arg) {
-        this.memoryUsage = arg;
-        return this;
-    }
-
-    public Long getAge() {
-        return this.age;
-    }
-
-    public RunPodEntity setAge(Long arg) {
-        this.age = arg;
-        return this;
-    }
-
-    public String getPodIpAddress() {
-        return this.podIpAddress;
-    }
-
-    public RunPodEntity setPodIpAddress(String arg) {
-        this.podIpAddress = arg;
-        return this;
-    }
-
-    public String getNodeIpAddress() {
-        return this.nodeIpAddress;
-    }
-
-    public RunPodEntity setNodeIpAddress(String arg) {
-        this.nodeIpAddress = arg;
-        return this;
-    }
-
-    public BigDecimal getCpuLimit() {
-        return this.cpuLimit;
-    }
-
-    public RunPodEntity setCpuLimit(BigDecimal arg) {
-        this.cpuLimit = arg;
-        return this;
-    }
-
-    public BigDecimal getMemoryLimit() {
-        return this.memoryLimit;
-    }
-
-    public RunPodEntity setMemoryLimit(BigDecimal arg) {
-        this.memoryLimit = arg;
-        return this;
-    }
-
-    public String getProbeStatus() {
-        return this.probeStatus;
-    }
-
-    public RunPodEntity setProbeStatus(String arg) {
-        this.probeStatus = arg;
-        return this;
-    }
 }

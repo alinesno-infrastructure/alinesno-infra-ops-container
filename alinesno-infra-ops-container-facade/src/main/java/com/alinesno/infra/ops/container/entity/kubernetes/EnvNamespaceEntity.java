@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.kubernetes;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -13,150 +16,84 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @version 1.0.0
  */
 @TableName("env_namespace")
+@Data
 public class EnvNamespaceEntity extends InfraBaseEntity {
     // fields
     /**
     * 空间名称
     */
     @TableField("namespace_name")
+	@ColumnType(length=255)
+	@ColumnComment("空间名称")
     private String namespaceName;
     /**
     * 类型
     */
     @TableField("type")
+	@ColumnType(length=255)
+	@ColumnComment("类型")
     private String type;
     /**
     * 环境名称
     */
     @TableField("env_name")
+	@ColumnType(length=255)
+	@ColumnComment("环境名称")
     private String envName;
     /**
     * 创建人
     */
     @TableField("creator")
+	@ColumnType(length=255)
+	@ColumnComment("创建人")
     private String creator;
     /**
     * CPU
     */
     @TableField("cpu")
+	@ColumnType(length=255)
+	@ColumnComment("CPU")
     private String cpu;
     /**
     * 内存
     */
     @TableField("memory")
+	@ColumnType(length=255)
+	@ColumnComment("内存")
     private String memory;
     /**
     * 存储
     */
     @TableField("storage")
+	@ColumnType(length=255)
+	@ColumnComment("存储")
     private String storage;
     /**
     * 已使用CPU
     */
     @TableField("used_cpu")
+	@ColumnType(length=255)
+	@ColumnComment("已使用CPU")
     private String usedCpu;
     /**
     * 已使用内存
     */
     @TableField("used_memory")
+	@ColumnType(length=255)
+	@ColumnComment("已使用内存")
     private String usedMemory;
     /**
     * 已使用存储
     */
     @TableField("used_storage")
+	@ColumnType(length=255)
+	@ColumnComment("已使用存储")
     private String usedStorage;
     /**
     * 备注
     */
     @TableField("remark")
+	@ColumnType(length=255)
+	@ColumnComment("备注")
     private String remark;
-    
-    // getter and setter methods
-    public String getNamespaceName() {
-        return this.namespaceName;
-    }
-    
-    public void setNamespaceName(String namespaceName) {
-        this.namespaceName = namespaceName;
-    }
-    
-    public String getType() {
-        return this.type;
-    }
-    
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    public String getEnvName() {
-        return this.envName;
-    }
-    
-    public void setEnvName(String envName) {
-        this.envName = envName;
-    }
-    
-    public String getCreator() {
-        return this.creator;
-    }
-    
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-    
-    public String getCpu() {
-        return this.cpu;
-    }
-    
-    public void setCpu(String cpu) {
-        this.cpu = cpu;
-    }
-    
-    public String getMemory() {
-        return this.memory;
-    }
-    
-    public void setMemory(String memory) {
-        this.memory = memory;
-    }
-    
-    public String getStorage() {
-        return this.storage;
-    }
-    
-    public void setStorage(String storage) {
-        this.storage = storage;
-    }
-    
-    public String getUsedCpu() {
-        return this.usedCpu;
-    }
-    
-    public void setUsedCpu(String usedCpu) {
-        this.usedCpu = usedCpu;
-    }
-    
-    public String getUsedMemory() {
-        return this.usedMemory;
-    }
-    
-    public void setUsedMemory(String usedMemory) {
-        this.usedMemory = usedMemory;
-    }
-    
-    public String getUsedStorage() {
-        return this.usedStorage;
-    }
-    
-    public void setUsedStorage(String usedStorage) {
-        this.usedStorage = usedStorage;
-    }
-    
-    public String getRemark() {
-        return this.remark;
-    }
-    
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

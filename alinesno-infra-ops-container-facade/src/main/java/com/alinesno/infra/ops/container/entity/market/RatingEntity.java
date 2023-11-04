@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.market;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,62 +17,31 @@ import java.util.Date;
  * 表名：ratings
  */
 @TableName("ratings")
+@Data
 public class RatingEntity extends InfraBaseEntity {
 
     @TableField("rating_id")
+	@ColumnType(length=255)
+	@ColumnComment("ratingId")
     private String ratingId;
 
     @TableField("user_id")
+	@ColumnType(length=255)
+	@ColumnComment("userId")
     private Long userId;
 
     @TableField("application_id")
+	@ColumnType(length=255)
+	@ColumnComment("applicationId")
     private Long applicationId;
 
     @TableField("rating_value")
+	@ColumnType(length=255)
+	@ColumnComment("ratingValue")
     private Integer ratingValue;
 
     @TableField("rating_time")
+	@ColumnType(length=255)
+	@ColumnComment("ratingTime")
     private Date ratingTime;
-
-    // Getters and setters
-
-    public String getRatingId() {
-        return ratingId;
-    }
-
-    public void setRatingId(String ratingId) {
-        this.ratingId = ratingId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getApplicationId() {
-        return applicationId;
-    }
-
-    public void setApplicationId(Long applicationId) {
-        this.applicationId = applicationId;
-    }
-
-    public Integer getRatingValue() {
-        return ratingValue;
-    }
-
-    public void setRatingValue(Integer ratingValue) {
-        this.ratingValue = ratingValue;
-    }
-
-    public Date getRatingTime() {
-        return ratingTime;
-    }
-
-    public void setRatingTime(Date ratingTime) {
-        this.ratingTime = ratingTime;
-    }
 }

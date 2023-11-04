@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.kubernetes;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -23,12 +26,15 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
  */
 @SuppressWarnings("serial")
 @TableName("event_manager_record")
+@Data
 public class ManagerRecordEntity extends InfraBaseEntity {
 
     /**
      * 操作说明
      */
     @TableField
+	@ColumnType(length=255)
+	@ColumnComment("操作说明")
     private String operation;
 
     /**
@@ -36,6 +42,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "执行时间")
     @TableField("method_time")
+	@ColumnType(length=255)
+	@ColumnComment("执行时间")
     private long methodTime;
 
     /**
@@ -43,6 +51,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "类方法")
     @TableField("method")
+	@ColumnType(length=255)
+	@ColumnComment("类方法")
     private String method;
 
     /**
@@ -51,6 +61,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
     @Excel(name = "请求参数")
     @TableField("params")
     @Basic(fetch = FetchType.LAZY)
+	@ColumnType(length=255)
+	@ColumnComment("请求参数")
     private String params;
 
     /**
@@ -58,6 +70,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "方法描述")
     @TableField("method_desc")
+	@ColumnType(length=255)
+	@ColumnComment("方法描述")
     private String methodDesc;
 
     /**
@@ -65,6 +79,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "请求记录")
     @TableField("record_type")
+	@ColumnType(length=255)
+	@ColumnComment("请求记录")
     private String recordType;
 
     /**
@@ -72,6 +88,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "服务器IP")
     @TableField("ip")
+	@ColumnType(length=255)
+	@ColumnComment("服务器IP")
     private String ip;
 
     /**
@@ -79,6 +97,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "请求链接")
     @TableField("url")
+	@ColumnType(length=255)
+	@ColumnComment("请求链接")
     private String url;
 
     /**
@@ -86,18 +106,24 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "浏览器信息")
     @TableField("agent")
+	@ColumnType(length=255)
+	@ColumnComment("浏览器信息")
     private String agent;
 
     /**
      * 创建时间
      */
     @TableField("create_time")
+	@ColumnType(length=255)
+	@ColumnComment("创建时间")
     private Date createTime;
 
     /**
      * 账户ID
      */
     @TableField("account_id")
+	@ColumnType(length=255)
+	@ColumnComment("账户ID")
     private String accountId;
 
     /**
@@ -105,6 +131,8 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "登陆名")
     @TableField("login_name")
+	@ColumnType(length=255)
+	@ColumnComment("登录名")
     private String loginName;
 
     /**
@@ -112,124 +140,15 @@ public class ManagerRecordEntity extends InfraBaseEntity {
      */
     @Excel(name = "用户名")
     @TableField("account_name")
+	@ColumnType(length=255)
+	@ColumnComment("用户名")
     private String accountName;
 
     /**
      * 角色权限
      */
     @TableField("role_power")
+	@ColumnType(length=255)
+	@ColumnComment("角色权限")
     private String rolePower;
-
-    // getter and setter methods
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
-    public long getMethodTime() {
-        return methodTime;
-    }
-
-    public void setMethodTime(long methodTime) {
-        this.methodTime = methodTime;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getParams() {
-        return params;
-    }
-
-    public void setParams(String params) {
-        this.params = params;
-    }
-
-    public String getMethodDesc() {
-        return methodDesc;
-    }
-
-    public void setMethodDesc(String methodDesc) {
-        this.methodDesc = methodDesc;
-    }
-
-    public String getRecordType() {
-        return recordType;
-    }
-
-    public void setRecordType(String recordType) {
-        this.recordType = recordType;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getAgent() {
-        return agent;
-    }
-
-    public void setAgent(String agent) {
-        this.agent = agent;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
-
-    public String getLoginName() {
-        return loginName;
-    }
-
-    public void setLoginName(String loginName) {
-        this.loginName = loginName;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getRolePower() {
-        return rolePower;
-    }
-
-    public void setRolePower(String rolePower) {
-        this.rolePower = rolePower;
-    }
 }

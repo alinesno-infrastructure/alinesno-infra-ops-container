@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.kubernetes;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import java.util.Date;
 
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
@@ -15,157 +18,86 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @version 1.0.0
  */
 @TableName("storage_class")
+@Data
 public class StorageClassEntity extends InfraBaseEntity {
 
     /**
      * 名称
      */
     @TableField("name")
+	@ColumnType(length=255)
+	@ColumnComment("名称")
     private String name;
 
     /**
      * 命名空间
      */
     @TableField("namespace")
+	@ColumnType(length=255)
+	@ColumnComment("命名空间")
     private String namespace;
 
     /**
      * 类型
      */
     @TableField("type")
+	@ColumnType(length=255)
+	@ColumnComment("类型")
     private String type;
 
     /**
      * 状态
      */
     @TableField("status")
+	@ColumnType(length=255)
+	@ColumnComment("状态")
     private String status;
 
     /**
      * 访问模式
      */
     @TableField("access_mode")
+	@ColumnType(length=255)
+	@ColumnComment("访问模式")
     private String accessMode;
 
     /**
      * 容量
      */
     @TableField("capacity")
+	@ColumnType(length=255)
+	@ColumnComment("容量")
     private String capacity;
 
     /**
      * 是否挂载
      */
     @TableField("is_mounted")
+	@ColumnType(length=255)
+	@ColumnComment("是否挂载")
     private Integer isMounted;
 
     /**
      * 创建时间
      */
     @TableField("creation_time")
+	@ColumnType(length=255)
+	@ColumnComment("创建时间")
     private Date creationTime;
 
     /**
      * 标签值
      */
     @TableField("label_values")
+	@ColumnType(length=255)
+	@ColumnComment("标签值")
     private String labelValues;
 
     /**
      * 注释值
      */
     @TableField("annotation_value")
+	@ColumnType(length=255)
+	@ColumnComment("注释值")
     private String annotationValue;
-
-    // getter and setter
-
-    public String getName() {
-        return this.name;
-    }
-
-    public StorageClassEntity setName(String arg) {
-        this.name = arg;
-        return this;
-    }
-
-    public String getNamespace() {
-        return this.namespace;
-    }
-
-    public StorageClassEntity setNamespace(String arg) {
-        this.namespace = arg;
-        return this;
-    }
-
-    public String getType() {
-        return this.type;
-    }
-
-    public StorageClassEntity setType(String arg) {
-        this.type = arg;
-        return this;
-    }
-
-    public String getStatus() {
-        return this.status;
-    }
-
-    public StorageClassEntity setStatus(String arg) {
-        this.status = arg;
-        return this;
-    }
-
-    public String getAccessMode() {
-        return this.accessMode;
-    }
-
-    public StorageClassEntity setAccessMode(String arg) {
-        this.accessMode = arg;
-        return this;
-    }
-
-    public String getCapacity() {
-        return this.capacity;
-    }
-
-    public StorageClassEntity setCapacity(String arg) {
-        this.capacity = arg;
-        return this;
-    }
-
-    public Integer getIsMounted() {
-        return this.isMounted;
-    }
-
-    public StorageClassEntity setIsMounted(Integer arg) {
-        this.isMounted = arg;
-        return this;
-    }
-
-    public Date getCreationTime() {
-        return this.creationTime;
-    }
-
-    public StorageClassEntity setCreationTime(Date arg) {
-        this.creationTime = arg;
-        return this;
-    }
-
-    public String getLabelValues() {
-        return this.labelValues;
-    }
-
-    public StorageClassEntity setLabelValues(String arg) {
-        this.labelValues = arg;
-        return this;
-    }
-
-    public String getAnnotationValue() {
-        return this.annotationValue;
-    }
-
-    public StorageClassEntity setAnnotationValue(String arg) {
-        this.annotationValue = arg;
-        return this;
-    }
 }

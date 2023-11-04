@@ -1,5 +1,8 @@
 package com.alinesno.infra.ops.container.entity.kubernetes;
 
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnComment;
+import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
+import lombok.Data;
 import java.util.Date;
 
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
@@ -15,97 +18,54 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @version 1.0.0
  */
 @TableName("run_ingress")
+@Data
 public class RunIngressEntity extends InfraBaseEntity {
 
     /**
      * 名称
      */
     @TableField("name")
+	@ColumnType(length=255)
+	@ColumnComment("名称")
     private String name;
 
     /**
      * 命名空间
      */
     @TableField("namespace")
+	@ColumnType(length=255)
+	@ColumnComment("命名空间")
     private String namespace;
 
     /**
      * 访问地址
      */
     @TableField("address")
+	@ColumnType(length=255)
+	@ColumnComment("访问地址")
     private String address;
 
     /**
      * 创建时间
      */
     @TableField("creation_time")
+	@ColumnType(length=255)
+	@ColumnComment("创建时间")
     private Date creationTime;
 
     /**
      * 标签值
      */
     @TableField("label_values")
+	@ColumnType(length=255)
+	@ColumnComment("标签值")
     private String labelValues;
 
     /**
      * 访问协议
      */
     @TableField("protocol")
+	@ColumnType(length=255)
+	@ColumnComment("访问协议")
     private String protocol;
-
-    // getter and setter
-
-    public String getName() {
-        return this.name;
-    }
-
-    public RunIngressEntity setName(String arg) {
-        this.name = arg;
-        return this;
-    }
-
-    public String getNamespace() {
-        return this.namespace;
-    }
-
-    public RunIngressEntity setNamespace(String arg) {
-        this.namespace = arg;
-        return this;
-    }
-
-    public String getAddress() {
-        return this.address;
-    }
-
-    public RunIngressEntity setAddress(String arg) {
-        this.address = arg;
-        return this;
-    }
-
-    public Date getCreationTime() {
-        return this.creationTime;
-    }
-
-    public RunIngressEntity setCreationTime(Date arg) {
-        this.creationTime = arg;
-        return this;
-    }
-
-    public String getLabelValues() {
-        return this.labelValues;
-    }
-
-    public RunIngressEntity setLabelValues(String arg) {
-        this.labelValues = arg;
-        return this;
-    }
-
-    public String getProtocol() {
-        return this.protocol;
-    }
-
-    public RunIngressEntity setProtocol(String arg) {
-        this.protocol = arg;
-        return this;
-    }
 }
