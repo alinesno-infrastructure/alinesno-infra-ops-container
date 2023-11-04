@@ -38,4 +38,6 @@ public class SubscriptionEntity extends InfraBaseEntity {
 	@ColumnType(length=255)
 	@ColumnComment("subscriptionTime")
     private Date subscriptionTime;
+
+
 }
