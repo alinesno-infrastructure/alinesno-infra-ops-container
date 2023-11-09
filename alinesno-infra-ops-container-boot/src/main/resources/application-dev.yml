@@ -18,6 +18,18 @@ spring:
   devtools:
     restart:
       enabled: true
+      
+actable:
+  table:
+    auto: update
+  model:
+    pack: com.alinesno.infra.ops.container.entity;
+  database:
+    type: mysql
+  index:
+    prefix: alinesno_ops_container_idx_
+  unique:
+    prefix: alinesno_ops_container_uni_
 
 # sa-token配置
 sa-token:
