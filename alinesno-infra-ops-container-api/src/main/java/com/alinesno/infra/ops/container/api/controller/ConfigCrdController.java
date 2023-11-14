@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "ConfigCrd")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/config_crd")
+@RequestMapping("/api/infra/ops/container/config_crd")
 public class ConfigCrdController extends BaseController<ConfigCrdEntity, IConfigCrdService> {
 
     // 日志记录

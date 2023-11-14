@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import lombok.EqualsAndHashCode;
 
 /**
  * 功能名：审计日志
@@ -20,6 +21,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
  * @author luoxiaodong
  * @version 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @TableName("event_audit")
 @Data
 public class EventAuditEntity extends InfraBaseEntity {

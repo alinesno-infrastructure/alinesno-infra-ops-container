@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "EventAudit")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/event_audit")
+@RequestMapping("/api/infra/ops/container/event_audit")
 public class EventAuditController extends BaseController<EventAuditEntity, IEventAuditService> {
 
     // 日志记录

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "StorageClassVolume")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/storage_class_volume")
+@RequestMapping("/api/infra/ops/container/storage_class_volume")
 public class StorageClassVolumeController extends BaseController<StorageClassVolumeEntity, IStorageClassVolumeService> {
 
     // 日志记录

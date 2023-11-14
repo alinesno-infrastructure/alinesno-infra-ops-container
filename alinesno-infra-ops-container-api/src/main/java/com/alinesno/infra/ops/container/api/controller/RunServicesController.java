@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "RunServices")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/run_services")
+@RequestMapping("/api/infra/ops/container/run_services")
 public class RunServicesController extends BaseController<RunServicesEntity, IRunServicesService> {
 
     // 日志记录

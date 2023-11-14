@@ -5,12 +5,15 @@ import com.gitee.sunchenbin.mybatis.actable.annotation.ColumnType;
 import lombok.Data;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.*;
+import lombok.EqualsAndHashCode;
+
 import java.time.LocalDateTime;
 
 /**
  * 容器产品实体类
  * 表名：service
  */
+@EqualsAndHashCode(callSuper = true)
 @TableName("container_product")
 @Data
 public class ContainerProductEntity extends InfraBaseEntity {

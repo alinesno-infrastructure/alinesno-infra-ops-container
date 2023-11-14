@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "RunDeployments")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/run_deployments")
+@RequestMapping("/api/infra/ops/container/run_deployments")
 public class RunDeploymentsController extends BaseController<RunDeploymentsEntity, IRunDeploymentsService> {
 
     // 日志记录

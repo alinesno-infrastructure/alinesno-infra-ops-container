@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "EnvNodes")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/env_nodes")
+@RequestMapping("/api/infra/ops/container/env_nodes")
 public class EnvNodesController extends BaseController<EnvNodesEntity, IEnvNodesService> {
 
     // 日志记录

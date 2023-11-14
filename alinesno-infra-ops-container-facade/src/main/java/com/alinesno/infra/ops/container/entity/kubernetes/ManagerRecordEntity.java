@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户操作记录
@@ -24,7 +25,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
  * @author luoxiaodong
  * @version 1.0.0
  */
-@SuppressWarnings("serial")
+@EqualsAndHashCode(callSuper = true)
 @TableName("event_manager_record")
 @Data
 public class ManagerRecordEntity extends InfraBaseEntity {

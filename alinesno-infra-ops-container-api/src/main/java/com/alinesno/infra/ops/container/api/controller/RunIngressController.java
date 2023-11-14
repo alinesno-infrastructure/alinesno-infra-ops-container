@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "RunIngress")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/run_ingress")
+@RequestMapping("/api/infra/ops/container/run_ingress")
 public class RunIngressController extends BaseController<RunIngressEntity, IRunIngressService> {
 
     // 日志记录

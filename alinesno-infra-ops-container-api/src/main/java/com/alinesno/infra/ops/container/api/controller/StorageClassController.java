@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "StorageClass")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/storage_class")
+@RequestMapping("/api/infra/ops/container/storage_class")
 public class StorageClassController extends BaseController<StorageClassEntity, IStorageClassService> {
 
     // 日志记录

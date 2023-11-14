@@ -8,6 +8,7 @@ import java.util.Date;
 import com.alinesno.infra.common.facade.mapper.entity.InfraBaseEntity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.EqualsAndHashCode;
 
 /**
  * 功能名：自定义资源
@@ -17,11 +18,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
  * @author luoxiaodong
  * @version 1.0.0
  */
+@EqualsAndHashCode(callSuper = true)
 @TableName("config_crd")
 @Data
 public class ConfigCrdEntity extends InfraBaseEntity  {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * 名称

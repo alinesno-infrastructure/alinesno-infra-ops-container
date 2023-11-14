@@ -29,7 +29,7 @@
     </el-row>
 
     <!-- 集群信息_start -->
-    <el-row>
+    <!-- <el-row>
       <el-col
         :span="7"
         style="width: calc(33.3333333333% - 25px) !important; margin-right: 10px">
@@ -86,7 +86,7 @@
           </div>
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
     <!-- 集群信息_end -->
 
     <el-row>
@@ -708,7 +708,7 @@ function drawPie() {
     } ;
 
 onMounted(() => {
-  drawPie() ;
+  // drawPie() ;
   drawBar2() ;
   drawBar() ;
 });

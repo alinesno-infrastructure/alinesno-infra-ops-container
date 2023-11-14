@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "RunPod")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/run_pod")
+@RequestMapping("/api/infra/ops/container/run_pod")
 public class RunPodController extends BaseController<RunPodEntity, IRunPodService> {
 
     // 日志记录

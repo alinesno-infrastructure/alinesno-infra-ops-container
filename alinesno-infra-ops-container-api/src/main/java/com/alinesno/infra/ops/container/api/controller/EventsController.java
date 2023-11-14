@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "Events")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/events")
+@RequestMapping("/api/infra/ops/container/events")
 public class EventsController extends BaseController<EventsEntity, IEventsService> {
 
     // 日志记录

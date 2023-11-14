@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "ManagerRecord")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/manager_record")
+@RequestMapping("/api/infra/ops/container/manager_record")
 public class ManagerRecordController extends BaseController<ManagerRecordEntity, IManagerRecordService> {
 
     // 日志记录

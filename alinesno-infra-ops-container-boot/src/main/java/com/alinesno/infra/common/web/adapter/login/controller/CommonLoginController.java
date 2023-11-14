@@ -134,35 +134,36 @@ public class CommonLoginController {
                 new Menu("Dashboard", "index", false, false , "dashboard", new Menu.Meta("概览", "dashboard", false, null))
         ));
 
-        Menu systemMenu = new Menu("System", "/system", false, "noRedirect", "Layout", true, new Menu.Meta("集群管理", "post", false, null),
+        Menu systemMenu = new Menu("Cluster", "/cluster", false, "noRedirect", "Layout", true, new Menu.Meta("集群管理", "post", false, null),
                 List.of(
-                        new Menu("Tenant", "system/tenant/index", false,false,  "system/tenant/index", new Menu.Meta("节点管理", "tree", false, null)),
-                        new Menu("User", "system/user/index", false,false,  "system/user/index", new Menu.Meta("集群管理", "user", false, null))
+                        new Menu("Node", "ops/container/nodes/index", false,false,  "ops/container/nodes/index", new Menu.Meta("节点管理", "tree", false, null)),
+                        new Menu("Cluster", "ops/container/cluster/index", false,false,  "ops/container/cluster/index", new Menu.Meta("集群管理", "user", false, null))
                 ));
 
-        Menu serviceMenu = new Menu("Log", "/log", false, "noRedirect", "Layout", true, new Menu.Meta("服务管理", "log", false, null),
+        Menu serviceMenu = new Menu("Service", "/service", false, "noRedirect", "Layout", true, new Menu.Meta("服务管理", "log", false, null),
                         List.of(
-                                new Menu("Operlog", "monitor/operlog/index", false,false, "monitor/operlog/index", new Menu.Meta("操作日志", "form", false, null)),
-                                new Menu("Logininfor", "monitor/logininfor/index", false,false, "monitor/logininfor/index", new Menu.Meta("登录日志", "logininfor", false, null))));
+                                new Menu("Service", "ops/container/service/index", false,false, "ops/container/service/index", new Menu.Meta("服务管理", "form", false, null)),
+                                new Menu("Deployment", "ops/container/deployment/index", false,false, "ops/container/deployment/index", new Menu.Meta("部署管理", "logininfor", false, null)),
+                                new Menu("Plugin", "ops/container/plugins/index", false,false, "ops/container/plugins/index", new Menu.Meta("插件管理", "form", false, null))
+                        ));
 
-        Menu monitorMenu = new Menu("Monitor", "/monitor", false, "noRedirect", "Layout", true, new Menu.Meta("容器管理", "monitor", false, null),
+        Menu monitorMenu = new Menu("Pod", "/pod", false, "noRedirect", "Layout", true, new Menu.Meta("容器管理", "monitor", false, null),
                 List.of(
-                        new Menu("Online", "monitor/online/index", false,false, "monitor/online/index", new Menu.Meta("在线用户", "online", false, null)),
-                        new Menu("Job", "monitor/job/index", false,false, "monitor/job/index", new Menu.Meta("定时任务", "job", false, null)),
-                        new Menu("Server", "monitor/server/index", false,false, "monitor/server/index", new Menu.Meta("服务监控", "server", false, null)),
-                        new Menu("Cache", "monitor/cache/index", false,false, "monitor/cache/index", new Menu.Meta("缓存监控", "redis", false, null)),
-                        new Menu("CacheList", "monitor/cache/list", false, false,"monitor/cache/list", new Menu.Meta("缓存列表", "redis-list", false, null))
+                        new Menu("Online", "ops/container/pod/index", false,false, "ops/container/pod/index", new Menu.Meta("Pod管理", "online", false, null)),
+                        new Menu("Job", "ops/container/ingress/index", false,false, "ops/container/ingress/index", new Menu.Meta("应用路由", "job", false, null)),
+                        new Menu("ConfigMap", "ops/container/configMap/index", false,false, "ops/container/configMap/index", new Menu.Meta("配置字典", "server", false, null)),
+                        new Menu("Secret", "ops/container/secret/index", false,false, "ops/container/secret/index", new Menu.Meta("密文", "redis", false, null))
                 ));
 
-        Menu themeMenu = new Menu("Theme", "/theme", false, "noRedirect", "Layout", true, new Menu.Meta("存储管理", "tool", false, null),
+        Menu themeMenu = new Menu("Storage", "/storage", false, "noRedirect", "Layout", true, new Menu.Meta("存储管理", "tool", false, null),
                 List.of(
-                        new Menu("Build", "tool/build/index", false,false, "tool/build/index", new Menu.Meta("系统主题", "build", false, null)),
-                        new Menu("Swagger", "tool/swagger/index",false, false, "tool/swagger/index", new Menu.Meta("登陆主题", "swagger", false, null))));
+                        new Menu("StorageClass", "ops/container/storageClass/index", false,false, "ops/container/storageClass/index", new Menu.Meta("存储类", "build", false, null)),
+                        new Menu("Pv", "ops/container/pv/index",false, false, "ops/container/pv/index", new Menu.Meta("存储卷", "swagger", false, null))));
 
-        Menu loggerMenu = new Menu("Theme", "/theme", false, "noRedirect", "Layout", true, new Menu.Meta("审计管理", "swagger", false, null),
+        Menu loggerMenu = new Menu("Logger", "/logger", false, "noRedirect", "Layout", true, new Menu.Meta("审计管理", "swagger", false, null),
                 List.of(
-                        new Menu("Build", "tool/build/index", false,false, "tool/build/index", new Menu.Meta("系统主题", "build", false, null)),
-                        new Menu("Swagger", "tool/swagger/index",false, false, "tool/swagger/index", new Menu.Meta("登陆主题", "swagger", false, null))));
+                        new Menu("Event", "ops/container/event/index", false,false, "ops/container/event/index", new Menu.Meta("事件管理", "build", false, null)),
+                        new Menu("OperationLog", "ops/container/operationLog/index",false, false, "ops/container/operationLog/index", new Menu.Meta("操作日志", "swagger", false, null))));
 
         List<Menu> menus = List.of(dashboardMenu , systemMenu, serviceMenu , monitorMenu, themeMenu, loggerMenu);
 

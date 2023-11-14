@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "ConfigDict")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/config_dict")
+@RequestMapping("/api/infra/ops/container/config_dict")
 public class ConfigDictController extends BaseController<ConfigDictEntity, IConfigDictService> {
 
     // 日志记录

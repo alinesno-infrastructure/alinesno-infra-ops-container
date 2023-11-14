@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "ConfigSecurity")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/config_security")
+@RequestMapping("/api/infra/ops/container/config_security")
 public class ConfigSecurityController extends BaseController<ConfigSecurityEntity, IConfigSecurityService> {
 
     // 日志记录

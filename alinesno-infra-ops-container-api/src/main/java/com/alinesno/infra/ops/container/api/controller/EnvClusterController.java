@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "EnvCluster")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/env_cluster")
+@RequestMapping("/api/infra/ops/container/env_cluster")
 public class EnvClusterController extends BaseController<EnvClusterEntity, IEnvClusterService> {
 
     // 日志记录

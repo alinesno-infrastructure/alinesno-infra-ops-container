@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "EnvPlugins")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/env_plugins")
+@RequestMapping("/api/infra/ops/container/env_plugins")
 public class EnvPluginsController extends BaseController<EnvPluginsEntity, IEnvPluginsService> {
 
     // 日志记录

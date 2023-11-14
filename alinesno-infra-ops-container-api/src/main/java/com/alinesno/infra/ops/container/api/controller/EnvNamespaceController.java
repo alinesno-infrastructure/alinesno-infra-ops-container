@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "EnvNamespace")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
-@RequestMapping("/api/infra/simple/crm/env_namespace")
+@RequestMapping("/api/infra/ops/container/env_namespace")
 public class EnvNamespaceController extends BaseController<EnvNamespaceEntity, IEnvNamespaceService> {
 
     // 日志记录
