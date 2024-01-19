@@ -1,4 +1,4 @@
-//package com.alinesno.infra.ops.container.k8s;
+package com.alinesno.infra.ops.container.k8s;//package com.alinesno.infra.ops.container.k8s;
 //
 //import io.kubernetes.client.openapi.ApiClient;
 //import io.kubernetes.client.util.ClientBuilder;

@@ -26,14 +26,15 @@
         <module>alinesno-infra-ops-container-facade</module>  <!-- 接口和引用 -->
         <module>alinesno-infra-ops-container-domain</module>  <!-- 领域服务 -->
         <module>alinesno-infra-ops-container-adapter</module> <!-- 适配层 -->
-        <module>alinesno-infra-ops-container-api</module>  <!-- 接口服务 -->
+        <module>alinesno-infra-ops-container-gateway</module>  <!-- 接口服务 -->
         <module>alinesno-infra-ops-container-client</module>  <!-- 对外引用 -->
+        <module>alinesno-infra-ops-container-analyzer</module>  <!-- 运行分析(结合LLM一起) -->
         <module>alinesno-infra-ops-container-boot</module>  <!-- 启动服务 -->
 
         <module>alinesno-infra-ops-container-sdk</module>  <!-- 第三方调用工具包 -->
 
         <!-- 前端服务
-        <module>alinesno-infra-ops-container-admin</module>
+        <module>alinesno-infra-ops-container-ui</module>
         -->
     </modules>
 
