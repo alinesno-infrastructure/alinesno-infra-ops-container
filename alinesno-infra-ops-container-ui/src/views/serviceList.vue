@@ -428,7 +428,7 @@ const productList = ref([
                 },
                 {
                     "hasInner": 0,
-                    "linkPath": "http://alinesno-infra-ops-container-admin.beta.base.infra.linesno.com",
+                    "linkPath": "http://alinesno-infra-ops-container-ui.beta.base.infra.linesno.com",
                     "prodStatus": "normal",
                     "name": "容器管理服务",
                     "id": "c6fca12e348cccf97495b3aea33adcef",

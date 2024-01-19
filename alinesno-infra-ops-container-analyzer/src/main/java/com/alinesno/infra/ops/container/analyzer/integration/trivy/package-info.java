@@ -1,0 +1,1 @@
+package com.alinesno.infra.ops.container.analyzer.integration.trivy;
