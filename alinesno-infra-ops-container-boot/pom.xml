@@ -36,6 +36,16 @@
 			<artifactId>alinesno-infra-ops-container-gateway</artifactId>
 			<version>${revision}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.alinesno.infra.ops</groupId>
+			<artifactId>alinesno-infra-ops-container-kubernetes</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alinesno.infra.ops</groupId>
+			<artifactId>alinesno-infra-ops-container-analyzer</artifactId>
+			<version>${revision}</version>
+		</dependency>
 
 	</dependencies>
 

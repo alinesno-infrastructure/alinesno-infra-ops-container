@@ -58,5 +58,9 @@ public class ResultBean {
     }
 
     public ResultBean(String kind, String name, List<FailureBean> error, PreAnalysisBean preAnalysis) {
+        this.kind = kind;
+        this.name = name;
+        this.error = error;
+        this.preAnalysisBean = preAnalysis ;
     }
 }

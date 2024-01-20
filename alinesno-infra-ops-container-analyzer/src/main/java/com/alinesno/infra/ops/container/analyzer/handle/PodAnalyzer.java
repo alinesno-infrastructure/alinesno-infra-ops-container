@@ -1,10 +1,10 @@
 package com.alinesno.infra.ops.container.analyzer.handle;
 
+import com.alinesno.infra.ops.container.analyzer.BaseHandleAnalyzer;
 import com.alinesno.infra.ops.container.analyzer.bean.AnalyzerBean;
 import com.alinesno.infra.ops.container.analyzer.bean.FailureBean;
 import com.alinesno.infra.ops.container.analyzer.bean.PreAnalysisBean;
 import com.alinesno.infra.ops.container.analyzer.bean.ResultBean;
-import com.alinesno.infra.ops.container.analyzer.utils.K8SUtils;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -12,7 +12,6 @@ import io.kubernetes.client.openapi.models.*;
 import io.kubernetes.client.util.Config;
 import lombok.SneakyThrows;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,9 +19,10 @@ import java.util.Objects;
 /**
  * Pod 分析服务
  */
-public class PodAnalyzer {
+public class PodAnalyzer implements BaseHandleAnalyzer {
 
-    public List<ResultBean> analyze(AnalyzerBean a) throws ApiException, IOException {
+    @Override
+    public List<ResultBean> analyze(AnalyzerBean a) throws ApiException {
         String kind = "Pod";
 
         CoreV1Api coreV1APi = new CoreV1Api(a.getClient());
@@ -31,6 +31,7 @@ public class PodAnalyzer {
         List<ResultBean> results = new ArrayList<>();
 
         for (V1Pod pod : list.getItems()) {
+
             List<FailureBean> failures = new ArrayList<>();
 
             if ("Pending".equals(Objects.requireNonNull(pod.getStatus()).getPhase())) {
@@ -45,39 +46,46 @@ public class PodAnalyzer {
 
             }
 
-            for (V1ContainerStatus containerStatus : Objects.requireNonNull(pod.getStatus().getContainerStatuses())) {
+            for (V1ContainerStatus containerStatus : pod.getStatus().getContainerStatuses()) {
+                // 遍历 Pod 中的每个容器状态
 
-                if (Objects.requireNonNull(containerStatus.getState()).getWaiting() != null) {
+                if (containerStatus.getState().getWaiting() != null) {
+                    // 如果容器状态为等待状态
+
                     if (isErrorReason(containerStatus.getState().getWaiting().getReason()) && containerStatus.getState().getWaiting().getMessage() != null && !containerStatus.getState().getWaiting().getMessage().isEmpty()) {
+                        // 如果等待状态是错误原因，并且有消息
                         failures.add(new FailureBean(containerStatus.getState().getWaiting().getMessage(), new ArrayList<>()));
                     }
-                }
 
-                if ("ContainerCreating".equals(containerStatus.getState().getWaiting().getReason()) && "Pending".equals(pod.getStatus().getPhase())) {
+                    if ("ContainerCreating".equals(containerStatus.getState().getWaiting().getReason()) && "Pending".equals(pod.getStatus().getPhase())) {
+                        // 如果容器正在创建并且 Pod 处于 Pending 状态
 
-                    // parse the event log and append details
-                    CoreV1Event evt = fetchLatestEvent(a, Objects.requireNonNull(pod.getMetadata()).getNamespace(), pod.getMetadata().getName());
-                    if (evt == null) {
-                        continue;
-                    }
-                    if ("FailedCreatePodSandBox".equals(evt.getReason()) && evt.getMessage() != null && !evt.getMessage().isEmpty()) {
-                        failures.add(new FailureBean(evt.getMessage(), new ArrayList<>()));
-                    }
-                }
-
-                // This represents container that is in CrashLoopBackOff state due to conditions such as OOMKilled
-                if ("CrashLoopBackOff".equals(containerStatus.getState().getWaiting().getReason())) {
-                    failures.add(new FailureBean(String.format("the last termination reason is %s container=%s pod=%s", containerStatus.getLastState().getTerminated().getReason(), containerStatus.getName(), pod.getMetadata().getName()), new ArrayList<>()));
-                } else {
-                    // when pod is Running but its ReadinessProbe fails
-                    if (!containerStatus.getReady() && "Running".equals(pod.getStatus().getPhase())) {
-                        // parse the event log and append details
+                        // 解析事件日志并附加详细信息
                         CoreV1Event evt = fetchLatestEvent(a, Objects.requireNonNull(pod.getMetadata()).getNamespace(), pod.getMetadata().getName());
                         if (evt == null) {
                             continue;
                         }
-                        if ("Unhealthy".equals(evt.getReason()) && evt.getMessage() != null && !evt.getMessage().isEmpty()) {
+                        if ("FailedCreatePodSandBox".equals(evt.getReason()) && evt.getMessage() != null && !evt.getMessage().isEmpty()) {
+                            // 如果事件原因是 FailedCreatePodSandBox 并且有消息
                             failures.add(new FailureBean(evt.getMessage(), new ArrayList<>()));
+                        }
+                    }
+
+                    // 表示容器处于 CrashLoopBackOff 状态，例如由于 OOMKilled 等条件
+                    if ("CrashLoopBackOff".equals(containerStatus.getState().getWaiting().getReason())) {
+                        failures.add(new FailureBean(String.format("最后的终止原因是 %s 容器=%s Pod=%s", containerStatus.getLastState().getTerminated().getReason(), containerStatus.getName(), pod.getMetadata().getName()), new ArrayList<>()));
+                    } else {
+                        // 当 Pod 处于 Running 但其 ReadinessProbe 失败时
+                        if (!containerStatus.getReady() && "Running".equals(pod.getStatus().getPhase())) {
+                            // 解析事件日志并附加详细信息
+                            CoreV1Event evt = fetchLatestEvent(a, Objects.requireNonNull(pod.getMetadata()).getNamespace(), pod.getMetadata().getName());
+                            if (evt == null) {
+                                continue;
+                            }
+                            if ("Unhealthy".equals(evt.getReason()) && evt.getMessage() != null && !evt.getMessage().isEmpty()) {
+                                // 如果事件原因是 Unhealthy 并且有消息
+                                failures.add(new FailureBean(evt.getMessage(), new ArrayList<>()));
+                            }
                         }
                     }
                 }
@@ -85,14 +93,14 @@ public class PodAnalyzer {
 
             if (!failures.isEmpty()) {
                 String key = String.format("%s/%s", Objects.requireNonNull(pod.getMetadata()).getNamespace(), pod.getMetadata().getName());
-                PreAnalysisBean preAnalysis = new PreAnalysisBean(pod, failures);
+                PreAnalysisBean preAnalysis = new PreAnalysisBean(null , failures);
                 results.add(new ResultBean(kind, key, null, preAnalysis));
             }
 
-            for (ResultBean result : results) {
-                String parent = K8SUtils.getParent(coreV1APi, null , null , null , Objects.requireNonNull(result.getPreAnalysisBean().getPod().getMetadata()));
-                result.setParentObject(parent);
-            }
+//            for (ResultBean result : results) {
+//                String parent = K8SUtils.getParent(coreV1APi, null , null , null , Objects.requireNonNull(result.getPreAnalysisBean().getPod().getMetadata()));
+//                result.setParentObject(parent);
+//            }
 
         }
 

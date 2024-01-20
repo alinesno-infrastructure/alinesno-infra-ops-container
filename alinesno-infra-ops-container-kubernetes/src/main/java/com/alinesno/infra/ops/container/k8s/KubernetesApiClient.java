@@ -1,8 +1,10 @@
 package com.alinesno.infra.ops.container.k8s;
 
 import io.kubernetes.client.openapi.ApiClient;
+import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.ClientBuilder;
 import io.kubernetes.client.util.KubeConfig;
+import io.kubernetes.client.util.credentials.AccessTokenAuthentication;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.StringReader;
@@ -25,7 +27,7 @@ public class KubernetesApiClient {
     /**
      * 缓存用户对应的ApiClient
      */
-    private static Map<String, ApiClient> kubeMap = new HashMap<>();
+    private static final Map<String, ApiClient> kubeMap = new HashMap<>();
 
     /**
      * 同步获取API客户端
@@ -76,6 +78,25 @@ public class KubernetesApiClient {
             } else {
                 apiClient = new ClientBuilder().setBasePath(apiServerUrl).build();
             }
+        }
+        return apiClient;
+    }
+
+    /**
+     * 通过Token获取到地址
+     * @param apiServerUrl
+     * @param token
+     * @return
+     * @throws Exception
+     */
+    public static synchronized ApiClient getApiClientByToken(String apiServerUrl, String token) {
+        if (apiClient == null) {
+            if (apiServerUrl == null || apiServerUrl.isEmpty()) {
+                apiServerUrl = DEFAULT_API_SERVER;
+            }
+
+            apiClient = new ClientBuilder().setBasePath(apiServerUrl).setVerifyingSsl(false) .setAuthentication(new AccessTokenAuthentication(token)).build();
+            Configuration.setDefaultApiClient(apiClient);
         }
         return apiClient;
     }
