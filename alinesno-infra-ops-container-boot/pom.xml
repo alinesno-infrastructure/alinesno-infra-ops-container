@@ -38,7 +38,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.alinesno.infra.ops</groupId>
-			<artifactId>alinesno-infra-ops-container-kubernetes</artifactId>
+			<artifactId>alinesno-infra-ops-kubernetes</artifactId>
 			<version>${revision}</version>
 		</dependency>
 		<dependency>
