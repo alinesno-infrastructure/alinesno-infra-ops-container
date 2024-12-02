@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.alinesno.infra.ops</groupId>
-			<artifactId>alinesno-infra-ops-container-kubernetes</artifactId>
+			<artifactId>alinesno-infra-ops-kubernetes</artifactId>
 			<version>${revision}</version>
         </dependency>
 
@@ -45,6 +45,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<!-- 扩展引入_start -->
+		<dependency>
+			<groupId>com.alinesno.infra.common</groupId>
+			<artifactId>alinesno-infra-common-extend-excel</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alinesno.infra.common</groupId>
+			<artifactId>alinesno-infra-common-extend-datascope</artifactId>
+			<version>${revision}</version>
+		</dependency>
+		<!-- 扩展引入_end -->
 
 		<dependency>
 			<groupId>com.alinesno.infra.common</groupId>
