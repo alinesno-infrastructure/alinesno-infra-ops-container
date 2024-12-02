@@ -4,11 +4,11 @@
          <!--应用数据-->
          <el-col :span="24" :xs="24">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams.dbName" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
+               <el-form-item label="应用名称" prop="clusterName">
+                  <el-input v-model="queryParams.clusterName" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
                </el-form-item>
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams['condition[dbName|like]']" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
+               <el-form-item label="应用名称" prop="clusterName">
+                  <el-input v-model="queryParams['condition[clusterName|like]']" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
                </el-form-item>
                <el-form-item>
                   <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -31,18 +31,22 @@
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="ApplicationList" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="ClusterList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
-               <el-table-column label="图标" align="center" with="80" key="status" v-if="columns[5].visible">
-               </el-table-column>
 
                <!-- 业务字段-->
-               <el-table-column label="应用名称" align="center" key="dbName" prop="dbName" v-if="columns[0].visible" />
-               <el-table-column label="应用描述" align="center" key="dbDesc" prop="dbDesc" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="表数据量" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="类型" align="center" key="dbType" prop="dbType" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="应用地址" align="center" key="jdbcUrl" prop="jdbcUrl" v-if="columns[4].visible" width="120" />
-               <el-table-column label="状态" align="center" key="hasStatus" v-if="columns[5].visible" />
+               <el-table-column label="应用名称" align="left" width="200" key="clusterName" prop="clusterName" v-if="columns[0].visible">
+                  <template #default="scope">
+                     <i :class="scope.row.icon" ></i> {{  scope.row.clusterName }}
+                  </template>
+               </el-table-column>
+               <el-table-column label="类型" align="center" width="100" key="configType" prop="configType" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="应用地址" align="center" key="apiServerUrl" prop="apiServerUrl" v-if="columns[4].visible" />
+               <el-table-column label="状态" align="center" key="hasStatus" v-if="columns[5].visible">
+                  <template #default="scope">
+                     <el-button type="primary" text bg icon="Paperclip" @click="configPrompt(scope.row)">配置</el-button>
+                  </template>
+               </el-table-column>
 
                <el-table-column label="添加时间" align="center" prop="addTime" v-if="columns[6].visible" width="160">
                   <template #default="scope">
@@ -53,13 +57,13 @@
                <!-- 操作字段  -->
                <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
                   <template #default="scope">
-                     <el-tooltip content="修改" placement="top" v-if="scope.row.ApplicationId !== 1">
+                     <el-tooltip content="修改" placement="top" v-if="scope.row.ClusterId !== 1">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                           v-hasPermi="['system:Application:edit']"></el-button>
+                           v-hasPermi="['system:Cluster:edit']"></el-button>
                      </el-tooltip>
-                     <el-tooltip content="删除" placement="top" v-if="scope.row.ApplicationId !== 1">
+                     <el-tooltip content="删除" placement="top" v-if="scope.row.ClusterId !== 1">
                         <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
-                           v-hasPermi="['system:Application:remove']"></el-button>
+                           v-hasPermi="['system:Cluster:remove']"></el-button>
                      </el-tooltip>
                   </template>
 
@@ -73,44 +77,54 @@
       <el-dialog :title="title" v-model="open" width="900px" append-to-body>
          <el-form :model="form" :rules="rules" ref="databaseRef" label-width="100px">
             <el-row>
+
                <el-col :span="24">
-                  <el-form-item label="名称" prop="dbName">
-                     <el-input v-model="form.dbName" placeholder="请输入应用名称" maxlength="50" />
+                  <el-form-item label="图标" prop="icon">
+                     <el-radio-group v-model="form.icon">
+                     <el-radio v-for="item in icons"
+                        :value="item.icon"
+                        :key="item.icon"
+                        :label="item.icon"
+                        >
+                        <i :class="item.icon"></i>
+                     </el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+               </el-col>   
+
+               <el-col :span="24">
+                  <el-form-item label="配置方式" prop="configType">
+                     <el-radio-group v-model="form.configType">
+                     <el-radio v-for="item in k8sConfigType" :key="item.key" :label="item.key">{{ item.name }}</el-radio>
+                     </el-radio-group>
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="名称" prop="clusterName">
+                     <el-input v-model="form.clusterName" placeholder="请输入集群名称" maxlength="50" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="连接" prop="jdbcUrl">
-                     <el-input v-model="form.jdbcUrl" placeholder="请输入jdbcUrl连接地址" maxlength="128" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="24">
-                  <el-form-item label="类型" prop="dbType">
-                     <el-input v-model="form.dbType" placeholder="请输入类型" maxlength="50" />
+                  <el-form-item label="地址" prop="apiServerUrl">
+                     <el-input v-model="form.apiServerUrl" placeholder="请输入apiServerUrl连接地址" maxlength="128" />
                   </el-form-item>
                </el-col>
             </el-row>
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="用户名" prop="dbUsername">
-                     <el-input v-model="form.dbUsername" placeholder="请输入连接用户名" maxlength="30" />
-                  </el-form-item>
-               </el-col>
-               <el-col :span="24">
-                  <el-form-item label="密码" prop="dbPasswd">
-                     <el-input v-model="form.dbPasswd" placeholder="请输入应用密码" type="password" maxlength="30" show-password />
+                  <el-form-item label="集群配置" prop="kubeConfig">
+                     <el-input v-model="form.kubeConfig" 
+                        type="textarea" 
+                        :rows="10" 
+                        :placeholder="form.configType == 'token' ? '请输入集群Token配置':'请输入集群配置'" 
+                        resize="none"
+                        maxlength="2048" />
                   </el-form-item>
                </el-col>
             </el-row>
 
-            <el-row>
-               <el-col :span="24">
-                  <el-form-item label="备注" prop="dbDesc">
-                     <el-input v-model="form.dbDesc" placeholder="请输入应用备注"></el-input>
-                  </el-form-item>
-               </el-col>
-            </el-row>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
@@ -123,21 +137,21 @@
    </div>
 </template>
 
-<script setup name="Application">
+<script setup name="Cluster">
 
 import {
-   listApplication,
-   delApplication,
-   getApplication,
-   updateApplication,
-   addApplication
-} from "@/api/ops/container/plugins";
+   listCluster,
+   delCluster,
+   getCluster,
+   updateCluster,
+   addCluster
+} from "@/api/ops/container/cluster";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 // 定义变量
-const ApplicationList = ref([]);
+const ClusterList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -149,6 +163,23 @@ const title = ref("");
 const dateRange = ref([]);
 const postOptions = ref([]);
 const roleOptions = ref([]);
+
+const k8sConfigType = ref([
+  { key: 'token', name: '令牌' },
+  { key: 'config', name: '配置' }
+]);
+
+const icons = ref([
+  { id: 1, icon: 'fa-solid fa-charging-station'} ,
+  { id: 1, icon: 'fa-solid fa-truck'} ,
+  { id: 2, icon: 'fa-solid fa-paper-plane'} ,
+  { id: 2, icon: 'fa-solid fa-ship'} ,
+  { id: 3, icon: 'fa-solid fa-chart-column'},
+  { id: 4, icon: 'fa-solid fa-server'}, 
+  { id: 5, icon: 'fa-solid fa-box-open'}, 
+  { id: 8, icon: 'fa-solid fa-file-invoice-dollar'}, 
+  { id: 9, icon: 'fa-solid fa-user-tie'},
+]);
 
 // 列显隐信息
 const columns = ref([
@@ -166,16 +197,14 @@ const data = reactive({
    queryParams: {
       pageNum: 1,
       pageSize: 10,
-      dbName: undefined,
+      clusterName: undefined,
       dbDesc: undefined
    },
    rules: {
-      dbName: [{ required: true, message: "名称不能为空", trigger: "blur" }] , 
-      jdbcUrl: [{ required: true, message: "连接不能为空", trigger: "blur" }],
-      dbType: [{ required: true, message: "类型不能为空", trigger: "blur" }] , 
-      dbUsername: [{ required: true , message: "用户名不能为空", trigger: "blur"}],
-      dbPasswd: [{ required: true, message: "密码不能为空", trigger: "blur" }] , 
-      dbDesc: [{ required: true, message: "备注不能为空", trigger: "blur" }] 
+      clusterName: [{ required: true, message: "名称不能为空", trigger: "blur" }] , 
+      configType: [{ required: true, message: "配置类型不能为空", trigger: "blur" }] , 
+      apiServerUrl: [{ required: true, message: "连接不能为空", trigger: "blur" }],
+      kubeConfig: [{ required: true, message: "集群配置不能为空", trigger: "blur" }] , 
    }
 });
 
@@ -184,9 +213,9 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询应用列表 */
 function getList() {
    loading.value = true;
-   listApplication(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+   listCluster(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
       loading.value = false;
-      ApplicationList.value = res.rows;
+      ClusterList.value = res.rows;
       total.value = res.total;
    });
 };
@@ -207,9 +236,9 @@ function resetQuery() {
 };
 /** 删除按钮操作 */
 function handleDelete(row) {
-   const ApplicationIds = row.id || ids.value;
-   proxy.$modal.confirm('是否确认删除应用编号为"' + ApplicationIds + '"的数据项？').then(function () {
-      return delApplication(ApplicationIds);
+   const ClusterIds = row.id || ids.value;
+   proxy.$modal.confirm('是否确认删除应用编号为"' + ClusterIds + '"的数据项？').then(function () {
+      return delCluster(ClusterIds);
    }).then(() => {
       getList();
       proxy.$modal.msgSuccess("删除成功");
@@ -228,7 +257,7 @@ function reset() {
    form.value = {
       id: undefined,
       deptId: undefined,
-      ApplicationName: undefined,
+      ClusterName: undefined,
       nickName: undefined,
       password: undefined,
       phonenumber: undefined,
@@ -253,8 +282,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
    reset();
-   const ApplicationId = row.id || ids.value;
-   getApplication(ApplicationId).then(response => {
+   const ClusterId = row.id || ids.value;
+   getCluster(ClusterId).then(response => {
       form.value = response.data;
       open.value = true;
       title.value = "修改应用";
@@ -265,14 +294,14 @@ function handleUpdate(row) {
 function submitForm() {
    proxy.$refs["databaseRef"].validate(valid => {
       if (valid) {
-         if (form.value.ApplicationId != undefined) {
-            updateApplication(form.value).then(response => {
+         if (form.value.ClusterId != undefined) {
+            updateCluster(form.value).then(response => {
                proxy.$modal.msgSuccess("修改成功");
                open.value = false;
                getList();
             });
          } else {
-            addApplication(form.value).then(response => {
+            addCluster(form.value).then(response => {
                proxy.$modal.msgSuccess("新增成功");
                open.value = false;
                getList();
