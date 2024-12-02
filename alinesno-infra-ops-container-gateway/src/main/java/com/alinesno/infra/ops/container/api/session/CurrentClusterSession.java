@@ -1,7 +1,7 @@
 package com.alinesno.infra.ops.container.api.session;
 
-import com.alinesno.infra.ops.container.entity.kubernetes.EnvClusterEntity;
-import com.alinesno.infra.ops.container.service.kubernetes.IEnvClusterService;
+import com.alinesno.infra.ops.container.entity.ClusterEntity;
+import com.alinesno.infra.ops.container.service.IClusterService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class CurrentClusterSession {
 	private static final String CURRENT_CLUSTER = "1";
 
 	@Autowired
-	private IEnvClusterService applicationService;
+	private IClusterService applicationService;
 
 	/**
 	 * 获取当前用户的集群配置信息
@@ -33,7 +33,7 @@ public class CurrentClusterSession {
 	 * @param request HTTP请求对象
 	 * @return 当前用户的集群配置信息
 	 */
-	public EnvClusterEntity get(HttpServletRequest request) {
+	public ClusterEntity get(HttpServletRequest request) {
 		try {
 			return this.get();
 		} catch (Exception e) {
@@ -47,7 +47,7 @@ public class CurrentClusterSession {
 	 * 
 	 * @return 当前用户的集群配置信息
 	 */
-	public EnvClusterEntity get() {
+	public ClusterEntity get() {
 		return null ;
 	}
 
