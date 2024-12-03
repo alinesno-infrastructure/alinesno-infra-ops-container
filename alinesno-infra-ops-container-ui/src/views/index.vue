@@ -10,14 +10,10 @@
             <div class="title">
               集群状态
               <div class="cluster-info">
-                <span
-                  ><i class="el-icon-monitor"></i>
-                  {{ currentEnvClusterObj.clusterName }}</span
-                >
-                <span
-                  ><i class="el-icon-link"></i> ApiServer:
-                  {{ currentEnvClusterObj.apiServerUrl }}</span
-                >
+                <span><i class="el-icon-monitor"></i>
+                  {{ currentEnvClusterObj.clusterName }}</span>
+                <span><i class="el-icon-link"></i> ApiServer:
+                  {{ currentEnvClusterObj.apiServerUrl }}</span>
               </div>
             </div>
             <div class="title-desc">
@@ -28,67 +24,6 @@
       </el-col>
     </el-row>
 
-    <!-- 集群信息_start -->
-    <!-- <el-row>
-      <el-col
-        :span="7"
-        style="width: calc(33.3333333333% - 25px) !important; margin-right: 10px">
-        <div class="box-header">
-          <div class="title">集群节点状态</div>
-          <div class="box-body">
-            <div class="sidecard-pie">
-              <div
-                id="echarts-pie-chart"
-                :style="{ width: '150px', height: '150px' }"
-              ></div>
-            </div>
-            <div class="sidecard">
-              <div class="box-title">节点在线状态</div>
-              <div>
-                <div class="node-item">
-                  在线节点: {{ currentEnvClusterObj.onlineNode }}
-                </div>
-                <div class="node-item">
-                  全部节点: {{ currentEnvClusterObj.totalNode }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="16">
-        <div class="box-header">
-          <div class="title">组件状态</div>
-          <div class="box-body" style="background-color: #fff">
-            <ul>
-              <li
-                class="item-list"
-                :class="item.status === '0' ? 'no-install-plugin' : ''"
-                v-for="(item, index) in icons"
-                :key="index"
-              >
-                <div class="item-icon">
-                  <img :src="getImagePath(item.icon)" alt="icon" />
-                </div>
-                <div class="item-label" v-if="item.status === '1'">
-                  <span style="font-weight: 600">{{ item.usage }}</span
-                  >/<span style="font-size: 13px">{{ item.total }}</span>
-                </div>
-                <div class="item-label" v-if="item.status === '0'">
-                  <span
-                    style="padding-top: 10px; font-size: 13px"
-                    disabled="disabled"
-                    >未安装</span
-                  >
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </el-col>
-    </el-row> -->
-    <!-- 集群信息_end -->
-
     <el-row>
       <el-col :span="24">
         <div class="box-header">
@@ -97,17 +32,10 @@
             <el-col :span="4">
               <div class="item-box">
                 <ul>
-                  <li
-                    class="item-box-info"
-                    :class="index === 0 ? 'active' : ''"
-                    v-for="(item, index) in resources"
-                    :key="index"
-                  >
+                  <li class="item-box-info" :class="index === 0 ? 'active' : ''" v-for="(item, index) in resources"
+                    :key="index">
                     <div class="item-status">
-                      <div
-                        class="server-desc"
-                        style="margin-top: 10px; margin-left: 10px"
-                      >
+                      <div class="server-desc" style="margin-top: 10px; margin-left: 10px">
                         <i :class="item.icon"></i>
                       </div>
                     </div>
@@ -126,10 +54,7 @@
             </el-col>
             <el-col :span="20">
               <div class="sidecard-bar">
-                <div
-                  id="echarts-bar-chart"
-                  :style="{ width: '100%', height: '270px' }"
-                ></div>
+                <div id="echarts-bar-chart" :style="{ width: '100%', height: '270px' }"></div>
               </div>
             </el-col>
           </el-row>
@@ -145,17 +70,10 @@
             <el-col :span="4">
               <div class="item-box">
                 <ul>
-                  <li
-                    class="item-box-info"
-                    :class="index === 0 ? 'active' : ''"
-                    v-for="(item, index) in components"
-                    :key="index"
-                  >
+                  <li class="item-box-info" :class="index === 0 ? 'active' : ''" v-for="(item, index) in components"
+                    :key="index">
                     <div class="item-status">
-                      <div
-                        class="server-desc"
-                        style="margin-top: 10px; margin-left: 10px"
-                      >
+                      <div class="server-desc" style="margin-top: 10px; margin-left: 10px">
                         <i :class="item.icon"></i>
                       </div>
                     </div>
@@ -172,10 +90,7 @@
             </el-col>
             <el-col :span="20">
               <div class="sidecard-bar">
-                <div
-                  id="echarts-bar2-chart"
-                  :style="{ width: '100%', height: '270px' }"
-                ></div>
+                <div id="echarts-bar2-chart" :style="{ width: '100%', height: '270px' }"></div>
               </div>
             </el-col>
           </el-row>
@@ -188,534 +103,488 @@
 <script setup name="Index">
 
 import * as echarts from "echarts";
+import { 
+  getCurrentCluster
+} from "@/api/ops/container/cluster";
 
-const currentEnvClusterObj = ref({ 
-        clusterName: "测试集群",
-        apiServerUrl: "http://localhost:8001",
-        totalNode: 2,
-        onlineNode: 2,
-      }) 
-const loading = ref(false) 
+const currentEnvClusterObj = ref({
+  clusterName: "测试集群",
+  apiServerUrl: "http://localhost:8001"
+})
+
+const loading = ref(false)
 
 /// 声明定义一下echart
 let echart = echarts;
 
-
-const icons = ref([
-        {icon: "assets/icons/dashboard/kubernetes.svg",name: "Kubernetes",total: "3",usage: "3",status: "1",},
-        {icon: "assets/icons/dashboard/istio.svg",name: "Istio",total: "1",usage: "1",status: "0",},
-        {icon: "assets/icons/dashboard/monitoring.svg",name: "Monitoring",total: "10",usage: "10",status: "1",},
-        {icon: "assets/icons/dashboard/logging.svg",name: "Logging",total: "5",usage: "5",status: "0",},
-        {icon: "assets/icons/dashboard/dev-ops.svg",name: "Dev Ops",total: "4",usage: "4",status: "1",},
-        {icon: "assets/icons/dashboard/logging.svg",name: "Logging",total: "4",usage: "4",status: "0",},
-        {icon: "assets/icons/dashboard/monitoring.svg",name: "Monitoring",total: "7",usage: "7",status: "0",}
-      ])  ;
-
 const resources = ref([
-        {
-          icon: "fas fa-microchip",
-          title: "CPU core",
-          total: "4",
-          usage: "0.64",
-          usagePre: "12%",
-        },
-        {
-          icon: "fas fa-memory",
-          title: "内存 Gi",
-          total: "7.68",
-          usage: "4.81",
-          usagePre: "12%",
-        },
-        {
-          icon: "fas fa-hdd",
-          title: "磁盘 GB",
-          total: "21.57",
-          usage: "207.71",
-          usagePre: "12%",
-        },
-        {
-          icon: "fab fa-docker",
-          title: "容器组",
-          total: "220",
-          usage: "28",
-          usagePre: "12%",
-        },
-      ]) ; 
+  {
+    icon: "fas fa-microchip",
+    title: "CPU core",
+    total: "4",
+    usage: "0.64",
+    usagePre: "12%",
+  },
+  {
+    icon: "fas fa-memory",
+    title: "内存 Gi",
+    total: "7.68",
+    usage: "4.81",
+    usagePre: "12%",
+  },
+  {
+    icon: "fas fa-hdd",
+    title: "磁盘 GB",
+    total: "21.57",
+    usage: "207.71",
+    usagePre: "12%",
+  },
+  {
+    icon: "fab fa-docker",
+    title: "容器组",
+    total: "220",
+    usage: "28",
+    usagePre: "12%",
+  },
+]);
 
 const components = ref([
-        {
-          icon: "fas fa-tools",
-          title: "API 服务器",
-          total: "延迟",
-          usage: "请求",
-        },
-        {
-          icon: "fas fa-shipping-fast",
-          title: "API 服务器",
-          total: "速率",
-          usage: "请求",
-        },
-        { icon: "fas fa-route", title: "调度器", total: "速率", usage: "调度" },
-        {
-          icon: "fab fa-firefox",
-          title: "调度器",
-          total: "次数",
-          usage: "调度",
-        },
-      ]) ; 
-
-function getImagePath(icon) {
-      console.log("icon = " + icon);
-      const imageUrl = new URL('/src/' + icon , import.meta.url)
-      return imageUrl ;
-} ;
+  {
+    icon: "fas fa-tools",
+    title: "API 服务器",
+    total: "延迟",
+    usage: "请求",
+  },
+  {
+    icon: "fas fa-shipping-fast",
+    title: "API 服务器",
+    total: "速率",
+    usage: "请求",
+  },
+  { icon: "fas fa-route", title: "调度器", total: "速率", usage: "调度" },
+  {
+    icon: "fab fa-firefox",
+    title: "调度器",
+    total: "次数",
+    usage: "调度",
+  },
+]);
 
 function drawBar2() {
-      let barChart = echart.init(
-        document.getElementById("echarts-bar2-chart")
-      );
+  let barChart = echart.init(
+    document.getElementById("echarts-bar2-chart")
+  );
 
-      var lineOption = {
-        title: {
-          text: "请求延迟(ms)",
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: ["访问流量", "访问IP"],
-        },
-        grid: {
-          x: 40,
-          x2: 40,
-          y2: 24,
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: [
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-            ],
-          },
+  var lineOption = {
+    title: {
+      text: "请求延迟(ms)",
+    },
+    tooltip: {
+      trigger: "axis",
+    },
+    legend: {
+      data: ["访问流量", "访问IP"],
+    },
+    grid: {
+      x: 40,
+      x2: 40,
+      y2: 24,
+    },
+    calculable: true,
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: false,
+        data: [
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
         ],
-        yAxis: [
-          {
-            type: "value",
-            axisLabel: {
-              formatter: "{value} K",
-            },
-          },
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+        axisLabel: {
+          formatter: "{value} K",
+        },
+      },
+    ],
+    series: [
+      {
+        name: "访问流量",
+        type: "line",
+        smooth: true,
+        data: [
+          11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13,
+          5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11,
+          10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5,
+          13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9,
+          15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
+          11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8,
+          12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11,
+          10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
         ],
-        series: [
-          {
-            name: "访问流量",
-            type: "line",
-            smooth: true,
-            data: [
-              11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13,
-              5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11,
-              10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5,
-              13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9,
-              15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
-              11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8,
-              12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11,
-              10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
-            ],
-            markPoint: {
-              data: [
-                { type: "max", name: "最大值" },
-                { type: "min", name: "最小值" },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
-          },
-          {
-            name: "访问IP",
-            type: "line",
-            smooth: true,
-            data: [
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
-              8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-              1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-            ],
-            markPoint: {
-              data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
-          },
+        markPoint: {
+          data: [
+            { type: "max", name: "最大值" },
+            { type: "min", name: "最小值" },
+          ],
+        },
+        markLine: {
+          data: [{ type: "average", name: "平均值" }],
+        },
+      },
+      {
+        name: "访问IP",
+        type: "line",
+        smooth: true,
+        data: [
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
+          8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
+          1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
         ],
-      };
-      barChart.setOption(lineOption);
-    } ; 
+        markPoint: {
+          data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
+        },
+        markLine: {
+          data: [{ type: "average", name: "平均值" }],
+        },
+      },
+    ],
+  };
+  barChart.setOption(lineOption);
+};
 
 function drawBar() {
-      let barChart = echart.init(document.getElementById("echarts-bar-chart"));
-      var lineOption = {
-        title: {
-          text: "CPU 用量(%)",
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        legend: {
-          data: ["访问流量", "访问IP"],
-        },
-        grid: {
-          x: 40,
-          x2: 40,
-          y2: 24,
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: "category",
-            boundaryGap: false,
-            data: [
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "1",
-              "2",
-              "3",
-              "4",
-              "5",
-              "6",
-              "7",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "8",
-              "9",
-              "10",
-              "11",
-              "12",
-              "13",
-              "14",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-              "15",
-              "16",
-              "17",
-              "18",
-              "19",
-              "20",
-              "21",
-              "22",
-              "23",
-              "24",
-              "25",
-              "26",
-              "27",
-              "28",
-            ],
-          },
+  let barChart = echart.init(document.getElementById("echarts-bar-chart"));
+  var lineOption = {
+    title: {
+      text: "CPU 用量(%)",
+    },
+    tooltip: {
+      trigger: "axis",
+    },
+    legend: {
+      data: ["访问流量", "访问IP"],
+    },
+    grid: {
+      x: 40,
+      x2: 40,
+      y2: 24,
+    },
+    calculable: true,
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: false,
+        data: [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
         ],
-        yAxis: [
-          {
-            type: "value",
-            axisLabel: {
-              formatter: "{value} K",
-            },
-          },
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+        axisLabel: {
+          formatter: "{value} K",
+        },
+      },
+    ],
+    series: [
+      {
+        name: "访问流量",
+        type: "line",
+        smooth: true,
+        data: [
+          11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13,
+          5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9,
+          15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
+          11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13,
+          5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9,
+          15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
+          11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13,
+          5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
         ],
-        series: [
-          {
-            name: "访问流量",
-            type: "line",
-            smooth: true,
-            data: [
-              11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13,
-              5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9,
-              15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
-              11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13,
-              5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13, 5, 13, 8, 11, 9,
-              15, 8, 12, 8, 8, 11, 10, 12, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
-              11, 10, 15, 13, 5, 13, 8, 11, 9, 15, 8, 12, 8, 8, 11, 10, 15, 13,
-              5, 13, 8, 11, 9, 15, 8, 12, 8, 8,
-            ],
-            markPoint: {
-              data: [
-                { type: "max", name: "最大值" },
-                { type: "min", name: "最小值" },
-              ],
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
-          },
-          {
-            name: "访问IP",
-            type: "line",
-            smooth: true,
-            data: [
-              8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-              1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-              8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
-            ],
-            markPoint: {
-              data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
-            },
-            markLine: {
-              data: [{ type: "average", name: "平均值" }],
-            },
-          },
+        markPoint: {
+          data: [
+            { type: "max", name: "最大值" },
+            { type: "min", name: "最小值" },
+          ],
+        },
+        markLine: {
+          data: [{ type: "average", name: "平均值" }],
+        },
+      },
+      {
+        name: "访问IP",
+        type: "line",
+        smooth: true,
+        data: [
+          8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 1, 2, 2, 5, 3, 2, 0,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
+          1, 2, 2, 5, 3, 2, 0, 8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
+          8, 2, 7, 5, 9, 10, 7, 8, 2, 7, 5, 9, 10, 7,
         ],
-      };
+        markPoint: {
+          data: [{ name: "周最低", value: -2, xAxis: 1, yAxis: -1.5 }],
+        },
+        markLine: {
+          data: [{ type: "average", name: "平均值" }],
+        },
+      },
+    ],
+  };
 
-      barChart.setOption(lineOption);
-    } ;
-
-function drawPie() {
-      let barChart = echart.init(document.getElementById("echarts-pie-chart"));
-
-      let lineOption = {
-        tooltip: {
-          trigger: "item",
-        },
-        legend: {
-          top: "5%",
-          left: "center",
-          show: false,
-        },
-        series: [
-          {
-            type: "pie",
-            radius: ["40%", "70%"],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: "center",
-            },
-            emphasis: {
-              label: {
-                show: false,
-                fontSize: 40,
-                fontWeight: "bold",
-              },
-            },
-            labelLine: {
-              show: false,
-            },
-            data: [
-              { value: 1048, name: "运行" },
-              { value: 348, name: "异常" },
-            ],
-          },
-        ],
-      };
-      barChart.setOption(lineOption);
-    } ;
+  barChart.setOption(lineOption);
+};
 
 onMounted(() => {
-  // drawPie() ;
-  drawBar2() ;
-  drawBar() ;
+  drawBar2();
+  drawBar();
 });
 
 onUnmounted(() => {
   echart.dispose;
 });
+
+/** 获取当前项目信息 */
+function handleCurrentCluster(){
+  getCurrentCluster().then(res => {
+    if(res.data){
+      currentEnvClusterObj.value = res.data
+    }
+  })
+}
+
+handleCurrentCluster() ; 
 
 </script>
 
@@ -783,7 +652,7 @@ onUnmounted(() => {
 
     .server-desc {
       font-size: 1.6rem;
-      color: #3b5998 ; 
+      color: #3b5998;
     }
 
     .active {
