@@ -4,11 +4,8 @@
          <!--应用数据-->
          <el-col :span="24" :xs="24">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams.dbName" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
-               </el-form-item>
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams['condition[dbName|like]']" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
+               <el-form-item label="应用名称" prop="name">
+                  <el-input v-model="queryParams.name" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
                </el-form-item>
                <el-form-item>
                   <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -31,35 +28,35 @@
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="ApplicationList" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="PodList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
-               <el-table-column label="图标" align="center" with="80" key="status" v-if="columns[5].visible">
-               </el-table-column>
 
                <!-- 业务字段-->
-               <el-table-column label="应用名称" align="center" key="dbName" prop="dbName" v-if="columns[0].visible" />
-               <el-table-column label="应用描述" align="center" key="dbDesc" prop="dbDesc" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="表数据量" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="类型" align="center" key="dbType" prop="dbType" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="应用地址" align="center" key="jdbcUrl" prop="jdbcUrl" v-if="columns[4].visible" width="120" />
-               <el-table-column label="状态" align="center" key="hasStatus" v-if="columns[5].visible" />
+               <el-table-column label="名称" align="left" key="name" width="350" prop="name" v-if="columns[0].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="就绪" align="center" key="ready" prop="ready" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="所在节点" align="center" key="nodeName" prop="nodeName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="IP地址" align="center" key="ipAddress" prop="ipAddress" v-if="columns[3].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="Phase" align="center" key="phase" prop="phase" v-if="columns[4].visible" width="120" />
+               <el-table-column label="容器状态" align="center" key="phase" prod="phase" v-if="columns[5].visible" />
+               <el-table-column label="等待删除" align="center" key="hasStatus" v-if="columns[5].visible" />
+               <el-table-column label="已重启" align="center" key="restartCount" prop="restartCount" v-if="columns[5].visible" />
 
-               <el-table-column label="添加时间" align="center" prop="addTime" v-if="columns[6].visible" width="160">
+               <el-table-column label="已创建" align="center" prop="addTime" v-if="columns[6].visible" width="160">
                   <template #default="scope">
-                     <span>{{ parseTime(scope.row.addTime) }}</span>
+                     <span>{{ scope.row.age }}</span>
                   </template>
                </el-table-column>
 
                <!-- 操作字段  -->
                <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
                   <template #default="scope">
-                     <el-tooltip content="修改" placement="top" v-if="scope.row.ApplicationId !== 1">
+                     <el-tooltip content="修改" placement="top" v-if="scope.row.PodId !== 1">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                           v-hasPermi="['system:Application:edit']"></el-button>
+                           v-hasPermi="['system:Pod:edit']"></el-button>
                      </el-tooltip>
-                     <el-tooltip content="删除" placement="top" v-if="scope.row.ApplicationId !== 1">
+                     <el-tooltip content="删除" placement="top" v-if="scope.row.PodId !== 1">
                         <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
-                           v-hasPermi="['system:Application:remove']"></el-button>
+                           v-hasPermi="['system:Pod:remove']"></el-button>
                      </el-tooltip>
                   </template>
 
@@ -74,8 +71,8 @@
          <el-form :model="form" :rules="rules" ref="databaseRef" label-width="100px">
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="名称" prop="dbName">
-                     <el-input v-model="form.dbName" placeholder="请输入应用名称" maxlength="50" />
+                  <el-form-item label="名称" prop="name">
+                     <el-input v-model="form.name" placeholder="请输入应用名称" maxlength="50" />
                   </el-form-item>
                </el-col>
             </el-row>
@@ -123,21 +120,21 @@
    </div>
 </template>
 
-<script setup name="Application">
+<script setup name="Pod">
 
 import {
-   listApplication,
-   delApplication,
-   getApplication,
-   updateApplication,
-   addApplication
-} from "@/api/ops/container/plugins";
+   listPod,
+   delPod,
+   getPod,
+   updatePod,
+   addPod
+} from "@/api/ops/container/pod";
 
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 // 定义变量
-const ApplicationList = ref([]);
+const PodList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -166,11 +163,11 @@ const data = reactive({
    queryParams: {
       pageNum: 1,
       pageSize: 10,
-      dbName: undefined,
+      name: undefined,
       dbDesc: undefined
    },
    rules: {
-      dbName: [{ required: true, message: "名称不能为空", trigger: "blur" }] , 
+      name: [{ required: true, message: "名称不能为空", trigger: "blur" }] , 
       jdbcUrl: [{ required: true, message: "连接不能为空", trigger: "blur" }],
       dbType: [{ required: true, message: "类型不能为空", trigger: "blur" }] , 
       dbUsername: [{ required: true , message: "用户名不能为空", trigger: "blur"}],
@@ -184,9 +181,9 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询应用列表 */
 function getList() {
    loading.value = true;
-   listApplication(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
+   listPod(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
       loading.value = false;
-      ApplicationList.value = res.rows;
+      PodList.value = res.rows;
       total.value = res.total;
    });
 };
@@ -207,9 +204,9 @@ function resetQuery() {
 };
 /** 删除按钮操作 */
 function handleDelete(row) {
-   const ApplicationIds = row.id || ids.value;
-   proxy.$modal.confirm('是否确认删除应用编号为"' + ApplicationIds + '"的数据项？').then(function () {
-      return delApplication(ApplicationIds);
+   const PodIds = row.id || ids.value;
+   proxy.$modal.confirm('是否确认删除应用编号为"' + PodIds + '"的数据项？').then(function () {
+      return delPod(PodIds);
    }).then(() => {
       getList();
       proxy.$modal.msgSuccess("删除成功");
@@ -228,7 +225,7 @@ function reset() {
    form.value = {
       id: undefined,
       deptId: undefined,
-      ApplicationName: undefined,
+      PodName: undefined,
       nickName: undefined,
       password: undefined,
       phonenumber: undefined,
@@ -253,8 +250,8 @@ function handleAdd() {
 /** 修改按钮操作 */
 function handleUpdate(row) {
    reset();
-   const ApplicationId = row.id || ids.value;
-   getApplication(ApplicationId).then(response => {
+   const PodId = row.id || ids.value;
+   getPod(PodId).then(response => {
       form.value = response.data;
       open.value = true;
       title.value = "修改应用";
@@ -265,14 +262,14 @@ function handleUpdate(row) {
 function submitForm() {
    proxy.$refs["databaseRef"].validate(valid => {
       if (valid) {
-         if (form.value.ApplicationId != undefined) {
-            updateApplication(form.value).then(response => {
+         if (form.value.PodId != undefined) {
+            updatePod(form.value).then(response => {
                proxy.$modal.msgSuccess("修改成功");
                open.value = false;
                getList();
             });
          } else {
-            addApplication(form.value).then(response => {
+            addPod(form.value).then(response => {
                proxy.$modal.msgSuccess("新增成功");
                open.value = false;
                getList();
