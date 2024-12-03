@@ -1,14 +1,14 @@
 <template>
    <div class="app-container">
       <el-row :gutter="20">
-         <!--应用数据-->
+         <!-- 节点数据 -->
          <el-col :span="24" :xs="24">
             <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="100px">
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams.dbName" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
+               <el-form-item label="节点名称" prop="name">
+                  <el-input v-model="queryParams.name" placeholder="请输入节点名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
                </el-form-item>
-               <el-form-item label="应用名称" prop="dbName">
-                  <el-input v-model="queryParams['condition[dbName|like]']" placeholder="请输入应用名称" clearable style="width: 240px" @keyup.enter="handleQuery" />
+               <el-form-item label="主机名" prop="hostName">
+                  <el-input v-model="queryParams['condition[hostName|like]']" placeholder="请输入主机名" clearable style="width: 240px" @keyup.enter="handleQuery" />
                </el-form-item>
                <el-form-item>
                   <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
@@ -17,7 +17,6 @@
             </el-form>
 
             <el-row :gutter="10" class="mb8">
-
                <el-col :span="1.5">
                   <el-button type="primary" plain icon="Plus" @click="handleAdd">新增</el-button>
                </el-col>
@@ -27,87 +26,125 @@
                <el-col :span="1.5">
                   <el-button type="danger" plain icon="Delete" :disabled="multiple" @click="handleDelete">删除</el-button>
                </el-col>
-
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
             <el-table v-loading="loading" :data="NodeList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
-               <el-table-column label="图标" align="center" with="80" key="status" v-if="columns[5].visible">
-               </el-table-column>
 
                <!-- 业务字段-->
-               <el-table-column label="应用名称" align="center" key="dbName" prop="dbName" v-if="columns[0].visible" />
-               <el-table-column label="应用描述" align="center" key="dbDesc" prop="dbDesc" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="表数据量" align="center" key="nickName" prop="nickName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="类型" align="center" key="dbType" prop="dbType" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="应用地址" align="center" key="jdbcUrl" prop="jdbcUrl" v-if="columns[4].visible" width="120" />
-               <el-table-column label="状态" align="center" key="hasStatus" v-if="columns[5].visible" />
-
-               <el-table-column label="添加时间" align="center" prop="addTime" v-if="columns[6].visible" width="160">
+               <el-table-column label="名称" align="left" key="name" prop="name" v-if="columns[0].visible" class="name-column">
                   <template #default="scope">
-                     <span>{{ parseTime(scope.row.addTime) }}</span>
+                     <div class="table-cell">
+                        <span class="icon-container">
+                           <i class="fa-solid fa-server"></i>
+                        </span>
+                        <div class="text-container">
+                        {{ scope.row.name }}
+                        <div v-copyText="scope.row.promptId">
+                           运行时: {{ scope.row.containerRuntimeVersion }} 
+                        </div>
+                        </div>
+                     </div>
+                  </template>
+               </el-table-column>
+               <el-table-column label="角色" align="center" key="roles" prop="roles" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="主机名" align="left" key="hostName" prop="hostName" v-if="columns[2].visible">
+                  <template #default="scope">
+                     <div>
+                        {{ scope.row.hostName}}
+                     </div>
+                     <div style="font-size: 13px;color: #a5a5a5;cursor: pointer;" v-copyText="scope.row.promptId">
+                        内部IP {{ scope.row.internalIp}} <el-icon><CopyDocument /></el-icon>
+                     </div>
+                  </template>
+               </el-table-column>
+               <el-table-column label="Kubelet版本" align="left" key="kubeletVersion" prop="kubeletVersion" v-if="columns[2].visible">
+                  <template #default="scope">
+                     <div>
+                        {{ scope.row.kubeletVersion }}
+                     </div>
+                     <div style="font-size: 13px;color: #a5a5a5;cursor: pointer;" v-copyText="scope.row.promptId">
+                        运行时长:{{ scope.row.age}}
+                     </div>
+                  </template>
+               </el-table-column>
+               <el-table-column label="操作系统镜像" align="left" key="osImage" prop="osImage" v-if="columns[1].visible">
+                  <template #default="scope">
+                     <div>
+                        {{ scope.row.oskernelVersion}}
+                     </div>
+                     <div style="font-size: 13px;color: #a5a5a5;cursor: pointer;" v-copyText="scope.row.promptId">
+                        内核: {{ scope.row.oskernelVersion}} 
+                     </div>
                   </template>
                </el-table-column>
 
                <!-- 操作字段  -->
                <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
                   <template #default="scope">
-                     <el-tooltip content="修改" placement="top" v-if="scope.row.NodeId !== 1">
+                     <el-tooltip content="修改" placement="top" v-if="scope.row.id !== 1">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
                            v-hasPermi="['system:Node:edit']"></el-button>
                      </el-tooltip>
-                     <el-tooltip content="删除" placement="top" v-if="scope.row.NodeId !== 1">
+                     <el-tooltip content="删除" placement="top" v-if="scope.row.id !== 1">
                         <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
                            v-hasPermi="['system:Node:remove']"></el-button>
                      </el-tooltip>
                   </template>
-
                </el-table-column>
             </el-table>
             <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum" v-model:limit="queryParams.pageSize" @pagination="getList" />
          </el-col>
       </el-row>
 
-      <!-- 添加或修改应用配置对话框 -->
+      <!-- 添加或修改节点信息对话框 -->
       <el-dialog :title="title" v-model="open" width="900px" append-to-body>
-         <el-form :model="form" :rules="rules" ref="databaseRef" label-width="100px">
+         <el-form :model="form" :rules="rules" ref="nodeRef" label-width="100px">
             <el-row>
                <el-col :span="24">
-                  <el-form-item label="名称" prop="dbName">
-                     <el-input v-model="form.dbName" placeholder="请输入应用名称" maxlength="50" />
-                  </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="24">
-                  <el-form-item label="连接" prop="jdbcUrl">
-                     <el-input v-model="form.jdbcUrl" placeholder="请输入jdbcUrl连接地址" maxlength="128" />
+                  <el-form-item label="名称" prop="name">
+                     <el-input v-model="form.name" placeholder="请输入节点名称" maxlength="50" />
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="类型" prop="dbType">
-                     <el-input v-model="form.dbType" placeholder="请输入类型" maxlength="50" />
-                  </el-form-item>
-               </el-col>
-            </el-row>
-            <el-row>
-               <el-col :span="24">
-                  <el-form-item label="用户名" prop="dbUsername">
-                     <el-input v-model="form.dbUsername" placeholder="请输入连接用户名" maxlength="30" />
+                  <el-form-item label="角色" prop="roles">
+                     <el-input v-model="form.roles" placeholder="请输入节点角色" maxlength="50" />
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="密码" prop="dbPasswd">
-                     <el-input v-model="form.dbPasswd" placeholder="请输入应用密码" type="password" maxlength="30" show-password />
+                  <el-form-item label="主机名" prop="hostName">
+                     <el-input v-model="form.hostName" placeholder="请输入主机名" maxlength="50" />
                   </el-form-item>
                </el-col>
-            </el-row>
-
-            <el-row>
                <el-col :span="24">
-                  <el-form-item label="备注" prop="dbDesc">
-                     <el-input v-model="form.dbDesc" placeholder="请输入应用备注"></el-input>
+                  <el-form-item label="内部IP" prop="internalIp">
+                     <el-input v-model="form.internalIp" placeholder="请输入内部IP地址" maxlength="50" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="容器运行时版本" prop="containerRuntimeVersion">
+                     <el-input v-model="form.containerRuntimeVersion" placeholder="请输入容器运行时版本" maxlength="50" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="年龄/存在时间" prop="age">
+                     <el-input v-model="form.age" placeholder="请输入节点年龄/存在时间" maxlength="50" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="Kubelet版本" prop="kubeletVersion">
+                     <el-input v-model="form.kubeletVersion" placeholder="请输入Kubelet版本" maxlength="50" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="操作系统镜像" prop="osImage">
+                     <el-input v-model="form.osImage" placeholder="请输入操作系统镜像" maxlength="100" />
+                  </el-form-item>
+               </el-col>
+               <el-col :span="24">
+                  <el-form-item label="内核版本" prop="oskernelVersion">
+                     <el-input v-model="form.oskernelVersion" placeholder="请输入内核版本" maxlength="50" />
                   </el-form-item>
                </el-col>
             </el-row>
@@ -285,3 +322,38 @@ function submitForm() {
 getList();
 
 </script>
+
+<!-- <style lang="scss" scoped>
+
+// 定义一些可复用的变量
+$primary-color: #409EFF;
+$text-secondary-color: #a5a5a5;
+$icon-font-size: 40px;
+$text-small-font-size: 13px;
+
+// 定义基础样式
+.table-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px; // 使用gap属性代替margin或padding来创建间距
+
+  .icon-container {
+    font-size: $icon-font-size;
+    color: $primary-color;
+    opacity: 0.7;
+    i {
+      // 如果需要针对图标有更多样式调整，可以在这里添加
+    }
+  }
+
+  .text-container {
+    & > div {
+      font-size: $text-small-font-size;
+      color: $text-secondary-color;
+      cursor: pointer;
+    }
+  }
+}
+
+</style> -->
