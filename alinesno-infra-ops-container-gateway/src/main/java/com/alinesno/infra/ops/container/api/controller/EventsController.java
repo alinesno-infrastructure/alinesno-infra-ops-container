@@ -8,9 +8,8 @@ import com.alinesno.infra.ops.container.entity.EventsEntity;
 import com.alinesno.infra.ops.container.service.IEventsService;
 import io.swagger.annotations.Api;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
@@ -26,14 +25,12 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  * @author luoxiaodong
  */
+@Slf4j
 @Api(tags = "Events")
 @RestController
 @Scope(SpringInstanceScope.PROTOTYPE)
 @RequestMapping("/api/infra/ops/container/events")
 public class EventsController extends BaseController<EventsEntity, IEventsService> {
-
-    // 日志记录
-    private static final Logger log = LoggerFactory.getLogger(EventsController.class);
 
     @Autowired
     private IEventsService service;
