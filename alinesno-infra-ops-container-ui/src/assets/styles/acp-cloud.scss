@@ -1404,3 +1404,31 @@ $chartColor: #3b5998;
     border-left: 0px solid #eee !important;
   }
 }
+
+
+// 定义一些可复用的变量
+$primary-color: #3b5998;
+$text-secondary-color: #a5a5a5;
+$icon-font-size: 25px;
+$text-small-font-size: 13px;
+
+// 定义基础样式
+.table-cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px; // 使用gap属性代替margin或padding来创建间距
+
+  .icon-container {
+    font-size: $icon-font-size;
+    color: $primary-color;
+  }
+
+  .text-container {
+    & > div {
+      font-size: $text-small-font-size;
+      color: $text-secondary-color;
+      cursor: pointer;
+    }
+  }
+}
