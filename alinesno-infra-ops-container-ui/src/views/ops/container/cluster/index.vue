@@ -35,13 +35,29 @@
                <el-table-column type="selection" width="50" align="center" />
 
                <!-- 业务字段-->
-               <el-table-column label="应用名称" align="left" width="200" key="clusterName" prop="clusterName" v-if="columns[0].visible">
+               <!-- <el-table-column label="应用名称" align="left" width="200" key="clusterName" prop="clusterName" v-if="columns[0].visible">
                   <template #default="scope">
                      <i :class="scope.row.icon" ></i> {{  scope.row.clusterName }}
                   </template>
+               </el-table-column> -->
+
+               <el-table-column label="名称" align="left" key="name" prop="name" v-if="columns[0].visible" class="name-column">
+                  <template #default="scope">
+                     <div class="table-cell">
+                        <span class="icon-container">
+                        <i :class="scope.row.icon"></i>
+                        </span>
+                        <div class="text-container">
+                           {{ scope.row.clusterName}}
+                           <div v-copyText="scope.row.promptId">
+                              环境: 12节点 
+                           </div>
+                        </div>
+                     </div>
+                  </template>
                </el-table-column>
                <el-table-column label="类型" align="center" width="100" key="configType" prop="configType" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="应用地址" align="center" key="apiServerUrl" prop="apiServerUrl" v-if="columns[4].visible" />
+               <el-table-column label="应用地址" align="left" key="apiServerUrl" prop="apiServerUrl" v-if="columns[4].visible" />
                <el-table-column label="状态" align="center" key="hasStatus" v-if="columns[5].visible">
                   <template #default="scope">
                      <el-button type="primary" text bg icon="Paperclip" @click="configPrompt(scope.row)">配置</el-button>
@@ -119,8 +135,7 @@
                         type="textarea" 
                         :rows="10" 
                         :placeholder="form.configType == 'token' ? '请输入集群Token配置':'请输入集群配置'" 
-                        resize="none"
-                        maxlength="2048" />
+                        resize="none"/>
                   </el-form-item>
                </el-col>
             </el-row>
