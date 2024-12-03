@@ -46,7 +46,12 @@ public class ClusterServiceImpl extends IBaseServiceImpl<ClusterEntity, ClusterM
         entity.setApiServerUrl(clusterDTO.getApiServerUrl());
         entity.setKubeConfig(clusterDTO.getKubeConfig());
 
-        save(entity);
+        saveOrUpdate(entity);
       }
+
+    @Override
+    public ClusterEntity getCluster(long currentUserId) {
+        return null;
+    }
 
 }
