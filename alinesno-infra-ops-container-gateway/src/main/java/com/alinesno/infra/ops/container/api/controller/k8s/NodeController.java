@@ -4,6 +4,8 @@ import com.alinesno.infra.common.core.constants.SpringInstanceScope;
 import com.alinesno.infra.common.facade.pageable.DatatablesPageBean;
 import com.alinesno.infra.common.facade.pageable.TableDataInfo;
 import com.alinesno.infra.ops.container.api.KubernetesAdapter;
+import com.alinesno.infra.ops.container.k8s.KubernetesPageBean;
+import com.alinesno.infra.ops.container.k8s.nodes.NodeV1;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -24,8 +26,9 @@ public class NodeController extends KubernetesAdapter {
     @PostMapping("/datatables")
     public TableDataInfo datatables(DatatablesPageBean page) {
         log.debug("page = {}", ToStringBuilder.reflectionToString(page));
-
-        return null ;
+        KubernetesPageBean<NodeV1.NodeInfo> kubePage = NodeV1.queryByPage(getApiClient() , page) ;
+        return toKubernetesPage(kubePage) ;
     }
+
 
 }
