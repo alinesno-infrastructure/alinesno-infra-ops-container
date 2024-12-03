@@ -44,4 +44,11 @@ public interface IClusterService extends IBaseService<ClusterEntity> {
 	 */
 	void saveCluster(ClusterDto clusterDTO);
 
+	/**
+	 * 获取到用户当前设置的集群信息
+	 * @param currentUserId
+	 * @return
+	 */
+    ClusterEntity getCluster(long currentUserId);
+
 }
