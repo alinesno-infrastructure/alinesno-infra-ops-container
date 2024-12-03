@@ -1,6 +1,8 @@
 package com.alinesno.infra.ops.container.k8s.pod;
 
+import com.alinesno.infra.common.facade.pageable.DatatablesPageBean;
 import com.alinesno.infra.ops.container.k8s.KubernetesApiParent;
+import com.alinesno.infra.ops.container.k8s.KubernetesPageBean;
 import com.alinesno.infra.ops.container.k8s.ops.GetOpsParams;
 import com.alinesno.infra.ops.container.k8s.ops.KubectlOpGet;
 import com.alinesno.infra.ops.container.k8s.ops.KubectlOpLog;
@@ -9,13 +11,21 @@ import io.kubernetes.client.PodLogs;
 import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.kubernetes.client.openapi.models.V1ContainerStatus;
 import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.openapi.models.V1PodCondition;
 import io.kubernetes.client.openapi.models.V1PodList;
+import lombok.Data;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * PodV1类
@@ -26,7 +36,9 @@ import java.util.List;
  * @author luoxiaodong
  * @version 1.0.0
  */
+@Slf4j
 public class PodV1 extends KubernetesApiParent implements KubectlOpLog, KubectlOpGet<V1Pod> {
+
 
 	/**
 	 * 获取Pod的日志流
@@ -111,7 +123,7 @@ public class PodV1 extends KubernetesApiParent implements KubectlOpLog, KubectlO
 				return v1PodList.getItems().get(0);
 			}
 		} catch (ApiException e) {
-			e.printStackTrace();
+			log.error("Error occurred while listing pods: " , e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -127,5 +139,130 @@ public class PodV1 extends KubernetesApiParent implements KubectlOpLog, KubectlO
 	@Override
 	public String yaml(String namespace, String name, ApiClient client) {
 		return KubectlOpGet.super.yaml(namespace, name, client);
+	}
+
+	public static KubernetesPageBean<PodInfo> queryByPage(ApiClient apiClient, DatatablesPageBean page, String namespace) {
+		KubernetesPageBean<PodInfo> kubePage = new KubernetesPageBean<>();
+
+		CoreV1Api api = new CoreV1Api(apiClient);
+
+		// 获取分页参数
+		int start = (page.getPageNum() - 1) * page.getPageSize();
+		int limit = page.getPageSize(); // 每页显示的记录数量
+		String _continue = null; // 用于分页的标识符
+
+		List<V1Pod> allPods = new ArrayList<>();
+		while (true) {
+			try {
+				V1PodList podList = api.listNamespacedPod(
+						namespace,
+						null, // pretty
+						null, // allowWatchBookmarks
+						_continue,
+						null, // fieldSelector
+						null, // labelSelector
+						limit,
+						null, // resourceVersion
+						null, // resourceVersionMatch
+						null, // timeoutSeconds
+						false // watch
+				);
+				allPods.addAll(podList.getItems());
+
+				// 如果已经获取到足够的Pod或者没有更多Pod可获取
+				if (allPods.size() >= start + limit || (podList.getMetadata().getContinue() == null)) {
+					break;
+				}
+
+				// 更新_continue参数
+				_continue = podList.getMetadata().getContinue();
+			} catch (ApiException e) {
+				// 处理异常
+				log.error("Error occurred while listing pods: " , e);
+				break;
+			}
+		}
+
+		int total = allPods.size();
+
+		// 只保留当前页的数据
+		List<V1Pod> list = allPods.subList(start, Math.min(start + limit, allPods.size()));
+
+		log.debug("podList size: {}", list.size());
+
+		List<PodInfo> pods = new ArrayList<>();
+		for (V1Pod pod : list) {
+			PodInfo podInfo = convertV1PodToPodInfo(pod);
+			pods.add(podInfo);
+		}
+
+		kubePage.setRecords(pods);
+		kubePage.setTotal(total);
+
+		return kubePage;
+	}
+
+	private static PodInfo convertV1PodToPodInfo(V1Pod pod) {
+
+		PodInfo podInfo = new PodInfo();
+		podInfo.setName(Objects.requireNonNull(pod.getMetadata()).getName());
+		podInfo.setReady(Objects.requireNonNull(Objects.requireNonNull(pod.getStatus()).getConditions()).stream()
+				.filter(condition -> "Ready".equals(condition.getType()))
+				.findFirst()
+				.map(V1PodCondition::getStatus)
+				.orElse("Unknown"));
+
+		podInfo.setNodeName(Objects.requireNonNull(pod.getSpec()).getNodeName());
+		podInfo.setIpAddress(pod.getStatus().getPodIP());
+		podInfo.setPhase(pod.getStatus().getPhase());
+
+		// 容器状态信息
+		StringBuilder containerStatusBuilder = new StringBuilder();
+		if (pod.getStatus().getContainerStatuses() != null) {
+			for (V1ContainerStatus status : pod.getStatus().getContainerStatuses()) {
+				containerStatusBuilder.append(status.getName()).append(": ").append(status.getReady()).append(", ");
+			}
+			if (!containerStatusBuilder.isEmpty()) {
+				containerStatusBuilder.setLength(containerStatusBuilder.length() - 2); // 去掉最后的逗号和空格
+			}
+		}
+		podInfo.setContainerStatus(containerStatusBuilder.toString());
+
+		// 删除等待时间
+		podInfo.setDeletionGracePeriodSeconds(pod.getMetadata().getDeletionGracePeriodSeconds() != null ?
+				pod.getMetadata().getDeletionGracePeriodSeconds().toString() : "N/A");
+
+		// 重启次数
+		int restartCount = 0;
+		if (pod.getStatus().getContainerStatuses() != null) {
+			for (V1ContainerStatus status : pod.getStatus().getContainerStatuses()) {
+				restartCount += status.getRestartCount();
+			}
+		}
+		podInfo.setRestartCount(restartCount);
+
+		// 创建时间
+		String age = fromAgo(Date.from(Objects.requireNonNull(pod.getMetadata().getCreationTimestamp()).toInstant()));
+		podInfo.setAge(age) ;
+
+		return podInfo;
+	}
+
+
+	/**
+	 * Pod信息类，用于封装Pod的信息。
+	 */
+	@Data
+	@ToString
+	public static class PodInfo {
+		private String name; // 名称
+		private String ready; // 就绪状态
+		private String nodeName; // 所在节点
+		private String ipAddress; // IP 地址
+		private String phase; // 阶段
+		private String containerStatus; // 容器状态
+		private String deletionGracePeriodSeconds; // 删除等待
+		private int restartCount; // 已重启次数
+		private String age ; // 创建时间
 	}
 }
