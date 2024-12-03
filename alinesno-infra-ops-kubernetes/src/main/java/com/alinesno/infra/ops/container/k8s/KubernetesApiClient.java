@@ -29,6 +29,8 @@ public class KubernetesApiClient {
      */
     private static final Map<String, ApiClient> kubeMap = new HashMap<>();
 
+    private static final Map<String, ApiClient> kubeMapByAPI = new HashMap<>();
+
     /**
      * 同步获取API客户端
      * @return ApiClient对象
@@ -65,8 +67,10 @@ public class KubernetesApiClient {
      * @return ApiClient对象
      * @throws Exception 异常
      */
-    public static synchronized ApiClient getApiClient(String apiServerUrl, String kubeConfigFileContent)
-            throws Exception {
+    public static synchronized ApiClient getApiClient(String apiServerUrl, String kubeConfigFileContent)  throws Exception {
+
+        ApiClient apiClient = kubeMapByAPI.get(apiServerUrl) ;
+
         if (apiClient == null) {
             if (apiServerUrl == null || apiServerUrl.isEmpty()) {
                 apiServerUrl = DEFAULT_API_SERVER;
@@ -78,7 +82,10 @@ public class KubernetesApiClient {
             } else {
                 apiClient = new ClientBuilder().setBasePath(apiServerUrl).build();
             }
+
+            kubeMapByAPI.put(apiServerUrl, apiClient);
         }
+
         return apiClient;
     }
 
@@ -90,14 +97,20 @@ public class KubernetesApiClient {
      * @throws Exception
      */
     public static synchronized ApiClient getApiClientByToken(String apiServerUrl, String token) {
+
+        ApiClient apiClient = kubeMapByAPI.get(apiServerUrl) ;
+
         if (apiClient == null) {
             if (apiServerUrl == null || apiServerUrl.isEmpty()) {
                 apiServerUrl = DEFAULT_API_SERVER;
             }
 
-            apiClient = new ClientBuilder().setBasePath(apiServerUrl).setVerifyingSsl(false) .setAuthentication(new AccessTokenAuthentication(token)).build();
+            apiClient = new ClientBuilder().setBasePath(apiServerUrl).setVerifyingSsl(false).setAuthentication(new AccessTokenAuthentication(token)).build();
             Configuration.setDefaultApiClient(apiClient);
+
+            kubeMapByAPI.put(apiServerUrl, apiClient);
         }
+
         return apiClient;
     }
 
