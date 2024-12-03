@@ -39,4 +39,9 @@ public class ClusterDto extends BaseDto {
     @NotBlank(message = "集群配置不能为空")
     private String kubeConfig;
 
+    /**
+     * 命名空间
+     */
+    private String namespace;
+
 }
