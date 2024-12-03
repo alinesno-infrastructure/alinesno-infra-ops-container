@@ -1,11 +1,10 @@
 package com.alinesno.infra.ops.container.api.session;
 
-import com.alinesno.infra.ops.container.entity.ClusterEntity;
-import com.alinesno.infra.ops.container.service.IClusterService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alinesno.infra.common.core.context.SpringContext;
+import com.alinesno.infra.common.web.adapter.login.account.CurrentAccountJwt;
+import com.alinesno.infra.ops.container.api.ClusterDto;
+import com.alinesno.infra.ops.container.service.IClusterUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,39 +15,25 @@ import org.springframework.stereotype.Component;
  * @author luoxiaodong
  * @version 1.0.0
  */
+@Slf4j
 @Component
 public class CurrentClusterSession {
-
-	private static final Logger log = LoggerFactory.getLogger(CurrentClusterSession.class);
 
 	private static final String NULL_APPLICATION_ID = "null";
 	private static final String CURRENT_CLUSTER = "1";
 
-	@Autowired
-	private IClusterService applicationService;
-
-	/**
-	 * 获取当前用户的集群配置信息
-	 * 
-	 * @param request HTTP请求对象
-	 * @return 当前用户的集群配置信息
-	 */
-	public ClusterEntity get(HttpServletRequest request) {
-		try {
-			return this.get();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 	/**
 	 * 获取当前用户的集群配置信息
 	 * 
 	 * @return 当前用户的集群配置信息
 	 */
-	public ClusterEntity get() {
-		return null ;
+	public static ClusterDto get() {
+
+		long currentUserId = CurrentAccountJwt.getUserId() ;
+
+		IClusterUserService managerProjectService = SpringContext.getBean(IClusterUserService.class);
+
+        return managerProjectService.getByUserId(currentUserId);
 	}
 
 	/**
@@ -56,8 +41,8 @@ public class CurrentClusterSession {
 	 * 
 	 * @return 当前集群ID
 	 */
-	public String getClusterId() {
-		return null;
+	public static long getClusterId() {
+		return get().getId() ;
 	}
 
 	/**
@@ -66,10 +51,7 @@ public class CurrentClusterSession {
 	 * @return 当前配置的Kubernetes信息
 	 */
 	public static String getKubeConfig() {
-
-		String kubeConfig = null;
-
-		return kubeConfig;
+		return get().getKubeConfig();
 	}
 
 }
