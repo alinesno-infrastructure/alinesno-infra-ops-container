@@ -54,7 +54,7 @@ public class PodV1 extends KubernetesApiParent implements KubectlOpLog, KubectlO
 		try {
 			return logs.streamNamespacedPodLog(params.getNamespaceName(), params.getName(), params.getContainer());
 		} catch (IOException | ApiException e) {
-			e.printStackTrace();
+			log.error("Error occurred while getting pod logs: " , e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -206,14 +206,18 @@ public class PodV1 extends KubernetesApiParent implements KubectlOpLog, KubectlO
 
 		PodInfo podInfo = new PodInfo();
 		podInfo.setName(Objects.requireNonNull(pod.getMetadata()).getName());
-		podInfo.setReady(Objects.requireNonNull(Objects.requireNonNull(pod.getStatus()).getConditions()).stream()
-				.filter(condition -> "Ready".equals(condition.getType()))
-				.findFirst()
-				.map(V1PodCondition::getStatus)
-				.orElse("Unknown"));
+		try{
+			podInfo.setReady(Objects.requireNonNull(Objects.requireNonNull(pod.getStatus()).getConditions()).stream()
+					.filter(condition -> "Ready".equals(condition.getType()))
+					.findFirst()
+					.map(V1PodCondition::getStatus)
+					.orElse("Unknown"));
+		}catch(Exception e){
+			podInfo.setReady("Unknown");
+		}
 
 		podInfo.setNodeName(Objects.requireNonNull(pod.getSpec()).getNodeName());
-		podInfo.setIpAddress(pod.getStatus().getPodIP());
+		podInfo.setIpAddress(Objects.requireNonNull(pod.getStatus()).getPodIP());
 		podInfo.setPhase(pod.getStatus().getPhase());
 
 		// 容器状态信息
