@@ -36,8 +36,14 @@
 
                <!-- 业务字段-->
                <el-table-column label="名称" align="left" key="name" prop="name" v-if="columns[0].visible" />
-               <el-table-column label="类型" align="center" key="type" prop="type" width="100" v-if="columns[0].visible" />
-               <el-table-column label="ClusterIP" align="center" width="200" key="clusterIP" prop="clusterIP" v-if="columns[2].visible" :show-overflow-tooltip="true" />
+
+               <el-table-column label="类型" align="center" key="type" prop="type" width="150" v-if="columns[0].visible">
+                  <template #default="scope">
+                     <el-button type="primary" text bg icon="Paperclip" @click="configPrompt(scope.row)">{{ scope.row.type }}</el-button>
+                  </template>
+               </el-table-column>
+
+               <el-table-column label="ClusterIP" align="center" width="200" key="clusterIP" prop="clusterIP" v-if="columns[2].visible" :show-overflow-tooltip="true"/>
                <el-table-column label="端口" align="center" key="dbType" width="300" prop="dbType" v-if="columns[3].visible" :show-overflow-tooltip="true">
                   <template #default="scope">
                      <div style="display: flex;flex-direction: column-reverse;gap: 5px;flex-wrap: wrap;align-content: space-around;">
