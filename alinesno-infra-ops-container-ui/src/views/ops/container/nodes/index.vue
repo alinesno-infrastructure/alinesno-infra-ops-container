@@ -40,10 +40,10 @@
                            <i class="fa-solid fa-server"></i>
                         </span>
                         <div class="text-container">
-                        {{ scope.row.name }}
-                        <div v-copyText="scope.row.promptId">
-                           运行时: {{ scope.row.containerRuntimeVersion }} 
-                        </div>
+                           {{ scope.row.name }}
+                           <div v-copyText="scope.row.promptId">
+                              运行时: {{ scope.row.containerRuntimeVersion }} 
+                           </div>
                         </div>
                      </div>
                   </template>
@@ -72,7 +72,7 @@
                <el-table-column label="操作系统镜像" align="left" key="osImage" prop="osImage" v-if="columns[1].visible">
                   <template #default="scope">
                      <div>
-                        {{ scope.row.oskernelVersion}}
+                        {{ scope.row.osImage}}
                      </div>
                      <div style="font-size: 13px;color: #a5a5a5;cursor: pointer;" v-copyText="scope.row.promptId">
                         内核: {{ scope.row.oskernelVersion}} 
@@ -81,15 +81,15 @@
                </el-table-column>
 
                <!-- 操作字段  -->
-               <el-table-column label="操作" align="center" width="150" class-name="small-padding fixed-width">
+               <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
                   <template #default="scope">
                      <el-tooltip content="修改" placement="top" v-if="scope.row.id !== 1">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                           v-hasPermi="['system:Node:edit']"></el-button>
+                           v-hasPermi="['system:Node:edit']">修改</el-button>
                      </el-tooltip>
                      <el-tooltip content="删除" placement="top" v-if="scope.row.id !== 1">
                         <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
-                           v-hasPermi="['system:Node:remove']"></el-button>
+                           v-hasPermi="['system:Node:remove']">删除</el-button>
                      </el-tooltip>
                   </template>
                </el-table-column>
@@ -202,7 +202,7 @@ const data = reactive({
    form: {},
    queryParams: {
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 100,
       dbName: undefined,
       dbDesc: undefined
    },
