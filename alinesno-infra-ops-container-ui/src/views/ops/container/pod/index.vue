@@ -28,18 +28,32 @@
                <right-toolbar v-model:showSearch="showSearch" @queryTable="getList" :columns="columns"></right-toolbar>
             </el-row>
 
-            <el-table v-loading="loading" :data="PodList" @selection-change="handleSelectionChange">
+            <el-table v-loading="loading" :data="podList" @selection-change="handleSelectionChange">
                <el-table-column type="selection" width="50" align="center" />
 
                <!-- 业务字段-->
-               <el-table-column label="名称" align="left" key="name" width="350" prop="name" v-if="columns[0].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="就绪" align="center" key="ready" prop="ready" v-if="columns[1].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="所在节点" align="center" key="nodeName" prop="nodeName" v-if="columns[2].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="IP地址" align="center" key="ipAddress" prop="ipAddress" v-if="columns[3].visible" :show-overflow-tooltip="true" />
-               <el-table-column label="Phase" align="center" key="phase" prop="phase" v-if="columns[4].visible" width="120" />
-               <el-table-column label="容器状态" align="center" key="phase" prod="phase" v-if="columns[5].visible" />
-               <el-table-column label="等待删除" align="center" key="hasStatus" v-if="columns[5].visible" />
-               <el-table-column label="已重启" align="center" key="restartCount" prop="restartCount" v-if="columns[5].visible" />
+               <el-table-column label="名称" align="left" key="name" prop="name" v-if="columns[0].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="就绪" align="center" key="ready" width="100" prop="ready" v-if="columns[1].visible" :show-overflow-tooltip="true" />
+               <el-table-column label="所在节点" align="left" key="nodeName" prop="nodeName" v-if="columns[2].visible" :show-overflow-tooltip="true">
+                  <template #default="scope">
+                     <div class="table-cell">
+                        <div class="text-container">
+                           {{ scope.row.nodeName }}
+                           <div v-copyText="scope.row.promptId">
+                              IP地址: {{ scope.row.ipAddress }} 
+                           </div>
+                        </div>
+                     </div>
+                  </template>
+               </el-table-column>
+               <el-table-column label="Phase" align="center" key="phase" prop="phase" v-if="columns[4].visible" width="130">
+                  <template #default="scope">
+                     <el-button type="primary" v-if="scope.row.phase == 'Running'" text bg icon="Paperclip" @click="configPrompt(scope.row)">{{ scope.row.phase }}</el-button>
+                     <el-button type="danger" v-if="scope.row.phase == 'Failed'" text bg icon="Paperclip" @click="configPrompt(scope.row)">{{ scope.row.phase }}</el-button>
+                  </template>
+               </el-table-column>
+               <el-table-column label="等待删除" align="center" width="120" key="deletionGracePeriodSeconds" prop="deletionGracePeriodSeconds" v-if="columns[5].visible" />
+               <el-table-column label="已重启" align="center" width="70" key="restartCount" prop="restartCount" v-if="columns[5].visible" />
 
                <el-table-column label="已创建" align="center" prop="addTime" v-if="columns[6].visible" width="160">
                   <template #default="scope">
@@ -52,11 +66,11 @@
                   <template #default="scope">
                      <el-tooltip content="修改" placement="top" v-if="scope.row.PodId !== 1">
                         <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)"
-                           v-hasPermi="['system:Pod:edit']"></el-button>
+                           v-hasPermi="['system:Pod:edit']">修改</el-button>
                      </el-tooltip>
                      <el-tooltip content="删除" placement="top" v-if="scope.row.PodId !== 1">
                         <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
-                           v-hasPermi="['system:Pod:remove']"></el-button>
+                           v-hasPermi="['system:Pod:remove']">删除</el-button>
                      </el-tooltip>
                   </template>
 
@@ -134,7 +148,7 @@ const router = useRouter();
 const { proxy } = getCurrentInstance();
 
 // 定义变量
-const PodList = ref([]);
+const podList = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -162,7 +176,7 @@ const data = reactive({
    form: {},
    queryParams: {
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 500,
       name: undefined,
       dbDesc: undefined
    },
@@ -183,7 +197,7 @@ function getList() {
    loading.value = true;
    listPod(proxy.addDateRange(queryParams.value, dateRange.value)).then(res => {
       loading.value = false;
-      PodList.value = res.rows;
+      podList.value = res.rows;
       total.value = res.total;
    });
 };
